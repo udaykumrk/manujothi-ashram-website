@@ -9,22 +9,6 @@ export function Ticker() {
 
     return (
         <>
-            {/* Inject keyframe once via a <style> tag */}
-            <style>{`
-        @keyframes ticker-scroll {
-          from { transform: translateX(0); }
-          to   { transform: translateX(-50%); }
-        }
-        .ticker-track {
-          display: flex;
-          width: max-content;
-          animation: ticker-scroll 55s linear infinite;
-          will-change: transform;
-        }
-        .ticker-track:hover {
-          animation-play-state: paused;
-        }
-      `}</style>
 
             <div
                 className="w-full overflow-hidden bg-brass/90 text-charcoal py-2"

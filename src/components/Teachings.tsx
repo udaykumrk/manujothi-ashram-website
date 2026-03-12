@@ -1,5 +1,16 @@
+import { useRef } from 'react';
 import { FadeIn } from './FadeIn';
+import { TextReveal } from './TextReveal';
 import { motion } from 'motion/react';
+import scriptureImg from '../assets/teaching_scripture.png';
+import prophecyImg from '../assets/teaching_prophecy.png';
+import meditationImg from '../assets/teaching_meditation.png';
+import coverAmrutha from '../assets/book_amrutha_manjari.png';
+import coverAnkuram from '../assets/book_ankuram.png';
+import coverLiberation from '../assets/book_secret_liberation.png';
+import coverHands from '../assets/book_loving_hands.png';
+import coverKrishna from '../assets/book_krishna_lahari.png';
+import coverSermons from '../assets/book_sermons.png';
 
 const teachings = [
   {
@@ -9,14 +20,16 @@ const teachings = [
     description:
       'A living inquiry into the parallels between the Holy Bible, Bhagavad Gita, Holy Quran, and the Vedas — revealing the single divine voice behind all scripture.',
     volume: 'Volume I',
+    image: scriptureImg,
   },
   {
     category: 'Eschatology',
     scriptureRef: 'Matthew 24:27',
     title: 'Prophecies of the Son of Man',
     description:
-      'Understanding the signs of the age through the lens of ancient prophets — Ahilathirattu, Arulnool, Paradise Lost and Gained — alongside the writings of Paulaseer Lawrie.',
+      'Understanding the signs of the age through the lens of ancient prophets — Ahilathirattu, Arulnool, Bhagavatham, Paradise Lost and Paradise Gained — alongside the writings of Paulaseer Lawrie.',
     volume: 'Volume II',
+    image: prophecyImg,
   },
   {
     category: 'Spiritual Discipline',
@@ -25,6 +38,7 @@ const teachings = [
     description:
       'Practical spiritual disciplines for aligning the soul with the eternal. Drawn from the Vedas, the Sermon on the Mount, and the lived experience of the Ashram community.',
     volume: 'Volume III',
+    image: meditationImg,
   },
 ];
 
@@ -34,32 +48,68 @@ const books = [
     vol: 'Vol. I · 2024',
     title: 'Amrutha Manjari — Gnana Makarantham',
     subtitle: '"The Nectar of Wisdom"',
+    author: 'Manujothi Ashram',
     lang: 'Telugu · English',
-    amazon: 'https://www.amazon.in/s?k=Amrutha+Manjari+Gnana+Makarantham',
+    link: 'mailto:ashram@manjothi.com?subject=Request%20Book%20-%20Amrutha%20Manjari%20Gnana%20Makarantham',
+    linkLabel: '✉ Request Free Copy',
+    cover: coverAmrutha,
   },
   {
     spine: 'AN',
     vol: 'Vol. II · 2025',
     title: 'Amrutha Manjari — Ankuram 2',
     subtitle: '"The Sprouting Seed"',
+    author: 'Manujothi Ashram',
     lang: 'Telugu · English',
-    amazon: 'https://www.amazon.in/s?k=Amrutha+Manjari+Ankuram',
+    link: 'mailto:ashram@manjothi.com?subject=Request%20Book%20-%20Amrutha%20Manjari%20Ankuram%202',
+    linkLabel: '✉ Request Free Copy',
+    cover: coverAnkuram,
+  },
+  {
+    spine: 'SL',
+    vol: '2019 · Partridge Publishing',
+    title: 'The Secret of Liberation',
+    subtitle: '"Purification of the self — the secret of immortality"',
+    author: 'Devaaseer Lankadieu',
+    lang: 'English',
+    link: 'https://www.amazon.in/Secret-Liberation-Devaaseer-Lankadieu/dp/1543751245',
+    linkLabel: '📖 Buy on Amazon',
+    external: true,
+    cover: coverLiberation,
+  },
+  {
+    spine: 'SH',
+    vol: '2024 · Partridge Publishing',
+    title: 'The Skill of His Loving Hands',
+    subtitle: '"A journey of spiritual healing and wellness"',
+    author: 'Devaaseer Lankadieu',
+    lang: 'English',
+    link: 'https://www.amazon.in/Skill-His-Loving-Hands/dp/1543774431',
+    linkLabel: '📖 Buy on Amazon',
+    external: true,
+    cover: coverHands,
   },
   {
     spine: 'KL',
     vol: 'Special',
     title: 'Krishna Lahari',
     subtitle: 'Devotional hymns & collected songs',
+    author: 'Manujothi Ashram',
     lang: 'Tamil · Telugu',
-    amazon: 'https://www.amazon.in/s?k=Krishna+Lahari+Lahari+Krishna',
+    link: 'mailto:ashram@manjothi.com?subject=Request%20Book%20-%20Krishna%20Lahari',
+    linkLabel: '✉ Request Free Copy',
+    cover: coverKrishna,
   },
   {
-    spine: 'SL',
+    spine: 'MS',
     vol: 'Archive',
     title: 'Shree Lahari Krishna — Messages & Sermons',
     subtitle: 'Compiled teachings 1969–1989',
+    author: 'Manujothi Ashram',
     lang: 'Multi-language',
-    amazon: 'https://www.amazon.in/s?k=Paulaseer+Lawrie+Lahari+Krishna',
+    link: 'mailto:ashram@manjothi.com?subject=Request%20Book%20-%20Messages%20and%20Sermons',
+    linkLabel: '✉ Request Free Copy',
+    cover: coverSermons,
   },
 ];
 
@@ -71,47 +121,78 @@ const AmazonIcon = () => (
 );
 
 export function Teachings() {
+  const scrollRef = useRef<HTMLDivElement>(null);
   return (
     <section id="teachings" className="py-32 px-6 bg-parchment">
       <div className="max-w-7xl mx-auto">
 
         {/* Header */}
-        <FadeIn>
+        <FadeIn variant="reveal">
           <div className="text-center mb-6">
             <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-brass">Core Teachings</span>
           </div>
-          <h2 className="font-serif text-4xl md:text-5xl text-charcoal text-center mb-4">
-            Publications &amp; Sermons
-          </h2>
+        </FadeIn>
+
+        <TextReveal
+          text="Publications & Sermons"
+          as="h2"
+          className="font-serif text-4xl md:text-5xl text-charcoal text-center mb-4"
+          delay={0.05}
+          stagger={0.06}
+        />
+
+        <FadeIn delay={0.1} variant="fade-up">
           <p className="text-center font-sans text-sm text-charcoal/50 max-w-xl mx-auto mb-6 leading-relaxed">
             The Ashram's <em>Amrutha Manjari</em> magazine series and collected messages of Lord Shri Lahari Krishna — broadcast on All India Radio, Tirunelveli (Akashvani) — freely distributed across India.
           </p>
         </FadeIn>
 
-        <FadeIn delay={0.1}>
+        <FadeIn delay={0.1} variant="scale">
           <div className="ornament mb-16">✦</div>
         </FadeIn>
 
         {/* Teaching cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-stone">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {teachings.map((item, index) => (
-            <FadeIn key={index} delay={index * 0.1}>
+            <FadeIn key={item.title} delay={index * 0.12} variant="scale">
               <motion.div
-                whileHover={{ y: -4 }}
-                transition={{ duration: 0.25, ease: 'easeOut' }}
-                className="group bg-parchment p-10 h-full flex flex-col hover:bg-stone/10 transition-colors duration-300 cursor-pointer"
+                whileHover={{
+                  y: -24,
+                  scale: 1.08,
+                  boxShadow: '0 35px 60px -15px rgba(0, 0, 0, 0.45), 0 20px 35px -10px rgba(184, 151, 104, 0.25)',
+                  zIndex: 10,
+                }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                className="group relative h-full flex flex-col overflow-hidden cursor-pointer rounded-2xl"
+                style={{ zIndex: 1 }}
               >
-                <div className="flex items-center justify-between mb-6">
-                  <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-brass">{item.category}</span>
-                  <span className="font-quote italic text-xs text-charcoal/40">{item.scriptureRef}</span>
+                {/* Background image */}
+                <div className="absolute inset-0 z-0">
+                  <img
+                    src={item.image}
+                    alt=""
+                    aria-hidden="true"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
                 </div>
-                <div className="text-[9px] font-sans uppercase tracking-[0.2em] text-charcoal/30 mb-3">{item.volume}</div>
-                <h3 className="font-serif text-2xl text-charcoal mb-4 group-hover:text-sepia transition-colors duration-300">{item.title}</h3>
-                <p className="font-sans text-sm text-charcoal/65 leading-relaxed flex-grow">{item.description}</p>
-                <div className="mt-8 pt-6 border-t border-stone">
-                  <span className="btn-arrow inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.15em] text-charcoal group-hover:text-brass transition-colors duration-300">
-                    Read Document <span className="arrow">→</span>
-                  </span>
+
+                {/* Dark overlay */}
+                <div className="absolute inset-0 z-[1] bg-gradient-to-t from-charcoal via-charcoal/85 to-charcoal/50 group-hover:from-charcoal group-hover:via-charcoal/90 group-hover:to-charcoal/60 transition-all duration-500" />
+
+                {/* Content */}
+                <div className="relative z-[2] p-10 flex flex-col h-full">
+                  <div className="flex items-center justify-between mb-6">
+                    <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-brass">{item.category}</span>
+                    <span className="font-quote italic text-xs text-parchment/40">{item.scriptureRef}</span>
+                  </div>
+                  <div className="text-[9px] font-sans uppercase tracking-[0.2em] text-parchment/30 mb-3">{item.volume}</div>
+                  <h3 className="font-serif text-2xl text-parchment mb-4 group-hover:text-brass transition-colors duration-300">{item.title}</h3>
+                  <p className="font-sans text-sm text-parchment/65 leading-relaxed flex-grow">{item.description}</p>
+                  <div className="mt-8 pt-6 border-t border-parchment/15 group-hover:border-brass/30 transition-colors duration-300">
+                    <span className="btn-arrow inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.15em] text-parchment/70 group-hover:text-brass transition-colors duration-300">
+                      Read Document <span className="arrow">→</span>
+                    </span>
+                  </div>
                 </div>
               </motion.div>
             </FadeIn>
@@ -119,71 +200,121 @@ export function Teachings() {
         </div>
 
         {/* ── Books / Publications section ── */}
-        <FadeIn delay={0.3}>
-          <div className="mt-20">
+        <FadeIn delay={0.1} variant="fade-up">
+          <div id="publications" className="mt-20">
 
             <div className="flex items-center gap-6 mb-10">
               <div className="h-px flex-1 bg-stone" />
               <div className="text-center">
                 <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-brass">Get the Publications</span>
-                <h3 className="font-serif text-2xl text-charcoal mt-1">Books by Manujothi Ashram</h3>
+                <h3 className="font-serif text-2xl text-charcoal mt-1">Books &amp; Publications</h3>
               </div>
               <div className="h-px flex-1 bg-stone" />
             </div>
 
             <p className="text-center font-sans text-xs text-charcoal/45 max-w-lg mx-auto mb-10 leading-relaxed">
-              Published by <strong className="text-charcoal/60">Arjuna Publications</strong> via Soundarya Lahari Creations. Literature is distributed <em>free of charge</em> to genuine seekers — or buy a printed copy on Amazon.
+              Published by <strong className="text-charcoal/60">Arjuna Publications</strong> via Soundarya Lahari Creations &amp; <strong className="text-charcoal/60">Partridge Publishing India</strong>. Ashram literature is distributed <em>free of charge</em> to genuine seekers.
             </p>
 
-            {/* Book cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-stone">
-              {books.map((book) => (
-                <div
-                  key={book.title}
-                  className="group bg-parchment p-8 flex flex-col hover:bg-stone/20 transition-colors duration-300"
-                >
-                  <div className="flex gap-3 items-end mb-6">
-                    <div className="relative w-10 h-14 bg-charcoal flex-shrink-0 flex items-center justify-center shadow-md">
-                      <div className="absolute left-0 inset-y-0 w-1.5 bg-brass/40" />
-                      <span className="font-serif text-brass text-sm font-bold pl-1">{book.spine}</span>
-                    </div>
-                    <span className="font-sans text-[9px] uppercase tracking-[0.2em] text-charcoal/30">{book.vol}</span>
-                  </div>
-                  <h4 className="font-serif text-lg text-charcoal leading-snug mb-1 group-hover:text-sepia transition-colors duration-300">{book.title}</h4>
-                  <p className="font-quote italic text-xs text-charcoal/45 mb-2">{book.subtitle}</p>
-                  <p className="font-sans text-[10px] uppercase tracking-[0.15em] text-brass/60 mb-6">{book.lang}</p>
-                  <a
-                    href={book.amazon}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-arrow mt-auto inline-flex items-center gap-2 border border-charcoal text-charcoal px-4 py-2.5 text-[9px] font-bold uppercase tracking-widest hover:bg-charcoal hover:text-parchment transition-colors duration-300"
-                  >
-                    <AmazonIcon />
-                    Search on Amazon <span className="arrow">→</span>
-                  </a>
+            {/* Book cards — horizontal auto-scroll carousel */}
+            <div className="relative">
+              {/* Left arrow */}
+              <button
+                onClick={() => {
+                  const el = scrollRef.current;
+                  if (el) el.scrollBy({ left: -324, behavior: 'smooth' });
+                }}
+                className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-charcoal/70 backdrop-blur-sm text-parchment flex items-center justify-center hover:bg-brass hover:text-charcoal transition-all duration-300 shadow-lg"
+                aria-label="Scroll left"
+              >
+                ←
+              </button>
+
+              {/* Right arrow */}
+              <button
+                onClick={() => {
+                  const el = scrollRef.current;
+                  if (el) el.scrollBy({ left: 324, behavior: 'smooth' });
+                }}
+                className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-charcoal/70 backdrop-blur-sm text-parchment flex items-center justify-center hover:bg-brass hover:text-charcoal transition-all duration-300 shadow-lg"
+                aria-label="Scroll right"
+              >
+                →
+              </button>
+
+              <div ref={scrollRef} className="w-full overflow-hidden rounded-2xl" role="region" aria-label="Books carousel">
+                <div className="book-scroll-track flex">
+                  {/* Two copies of all books for seamless infinite loop */}
+                  {[0, 1].map((copy) =>
+                    books.map((book) => (
+                      <div
+                        key={`${copy}-${book.title}`}
+                        className="group relative flex-shrink-0 w-[300px] h-[400px] rounded-2xl overflow-hidden mx-3"
+                      >
+                        {/* Book cover image */}
+                        <img
+                          src={book.cover}
+                          alt={`${book.title} — Book Cover`}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+
+                        {/* Bottom gradient — hidden by default, slides up on hover */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                        {/* Content overlay — hidden, slides up on hover */}
+                        <div className="absolute bottom-0 left-0 right-0 p-5 flex flex-col z-[2] opacity-0 translate-y-6 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-out">
+                          {/* Volume / language pill */}
+                          <span className="font-sans text-[9px] uppercase tracking-[0.2em] text-brass/80 mb-1">
+                            {book.vol} · {book.lang}
+                          </span>
+
+                          <h4 className="font-serif text-lg text-parchment leading-snug mb-1">
+                            {book.title}
+                          </h4>
+
+                          <p className="font-quote italic text-xs text-parchment/50 mb-1 line-clamp-1">
+                            {book.subtitle}
+                          </p>
+
+                          <p className="font-sans text-[10px] text-brass font-medium mb-3">
+                            by {book.author}
+                          </p>
+
+                          {/* Action button */}
+                          <a
+                            href={book.link}
+                            {...(book.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                            className="btn-arrow inline-flex items-center gap-2 bg-brass text-charcoal px-4 py-2.5 text-[9px] font-bold uppercase tracking-widest hover:bg-parchment transition-colors duration-300 w-fit rounded-full"
+                          >
+                            {book.linkLabel} <span className="arrow">→</span>
+                          </a>
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
-              ))}
+              </div>
             </div>
 
             {/* Bottom bar */}
-            <div className="mt-px bg-charcoal text-parchment flex flex-col sm:flex-row items-center justify-between gap-4 px-8 py-5">
+            <div className="mt-4 bg-charcoal text-parchment flex flex-col sm:flex-row items-center justify-between gap-4 px-8 py-5 rounded-2xl">
               <p className="font-sans text-xs text-parchment/50">
-                Can't find what you need? Search all Ashram publications on Amazon.
+                All Ashram publications are distributed free of charge to genuine seekers.
               </p>
               <div className="flex flex-wrap gap-3 flex-shrink-0">
                 <a
-                  href="https://www.amazon.in/s?k=Manujothi+Ashram+Lahari+Krishna"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-arrow inline-flex items-center gap-2 bg-brass text-charcoal px-5 py-2.5 text-[9px] font-bold uppercase tracking-widest hover:bg-parchment transition-colors duration-300"
-                >
-                  Browse All on Amazon <span className="arrow">→</span>
-                </a>
-                <a
-                  href="mailto:contact@daysofsonofman.org?subject=Request%20Free%20Publications"
-                  className="btn-arrow inline-flex items-center gap-2 border border-parchment/20 text-parchment/65 px-5 py-2.5 text-[9px] font-semibold uppercase tracking-widest hover:border-brass hover:text-brass transition-colors duration-300"
+                  href="mailto:ashram@manjothi.com?subject=Request%20Free%20Publications"
+                  className="btn-arrow inline-flex items-center gap-2 bg-brass text-charcoal px-5 py-2.5 text-[9px] font-bold uppercase tracking-widest hover:bg-parchment transition-colors duration-300 rounded-full"
                 >
                   Request Free Copies <span className="arrow">→</span>
+                </a>
+                <a
+                  href="https://www.youtube.com/@SoundaryaLahariCreations"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-arrow inline-flex items-center gap-2 border border-parchment/20 text-parchment/65 px-5 py-2.5 text-[9px] font-semibold uppercase tracking-widest hover:border-brass hover:text-brass transition-colors duration-300 rounded-full"
+                >
+                  Watch on YouTube <span className="arrow">→</span>
                 </a>
               </div>
             </div>

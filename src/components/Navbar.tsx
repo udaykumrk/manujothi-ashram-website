@@ -1,6 +1,7 @@
 import { Menu, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { AshramEmblem } from './AshramEmblem';
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,9 +13,16 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [isOpen]);
+
   const navLinks = [
     { name: 'About Us', href: '#about' },
     { name: 'Core Teachings', href: '#teachings' },
+    { name: 'Publications', href: '#publications' },
     { name: 'Visit', href: '#visit' },
     { name: 'Events', href: '#events' },
   ];
@@ -26,8 +34,8 @@ export function Navbar() {
 
       <nav
         className={`fixed top-[2px] w-full z-50 transition-all duration-500 ${scrolled
-            ? 'bg-parchment/95 backdrop-blur-md shadow-sm py-0'
-            : 'bg-transparent py-0'
+          ? 'bg-charcoal/30 backdrop-blur-xl shadow-lg border-b border-brass/20 py-0'
+          : 'bg-transparent py-0'
           }`}
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-10">
@@ -38,20 +46,25 @@ export function Navbar() {
             {/* Brand */}
             <a
               href="#"
-              className="flex flex-col leading-none group"
+              className="flex items-center gap-3 leading-none group"
               aria-label="Manujothi Ashram Home"
             >
-              <span
-                className={`font-serif tracking-wide transition-all duration-500 ${scrolled ? 'text-charcoal text-xl' : 'text-parchment text-2xl'
-                  }`}
-              >
-                Manujothi Ashram
-              </span>
-              <span
-                className={`font-sans text-[10px] uppercase tracking-[0.25em] transition-all duration-500 ${scrolled ? 'text-brass' : 'text-brass/80'
-                  }`}
-              >
-                Tirunelveli · Est. 1963
+              <AshramEmblem
+                size={scrolled ? 36 : 44}
+                className="transition-all duration-500 flex-shrink-0"
+              />
+              <span className="flex flex-col">
+                <span
+                  className={`font-serif tracking-wide transition-all duration-500 ${scrolled ? 'text-parchment text-xl' : 'text-parchment text-2xl'
+                    }`}
+                >
+                  Manujothi Ashram
+                </span>
+                <span
+                  className={`font-sans text-[10px] uppercase tracking-[0.25em] transition-all duration-500 ${'text-brass/80'}`}
+                >
+                  Tirunelveli · Est. 1963
+                </span>
               </span>
             </a>
 
@@ -62,8 +75,8 @@ export function Navbar() {
                   key={link.name}
                   href={link.href}
                   className={`animated-link text-xs font-medium uppercase tracking-[0.15em] transition-colors duration-300 ${scrolled
-                      ? 'text-charcoal/70 hover:text-charcoal'
-                      : 'text-parchment/80 hover:text-parchment'
+                    ? 'text-parchment/80 hover:text-parchment'
+                    : 'text-parchment/80 hover:text-parchment'
                     }`}
                 >
                   {link.name}
@@ -71,7 +84,7 @@ export function Navbar() {
               ))}
               <a
                 href="#support"
-                className="ml-2 border border-brass text-brass px-5 py-2 text-xs font-semibold uppercase tracking-widest hover:bg-brass hover:text-charcoal transition-all duration-300"
+                className="ml-2 border border-brass text-brass px-5 py-2 text-xs font-semibold uppercase tracking-widest hover:bg-brass hover:text-charcoal transition-all duration-300 rounded-full"
               >
                 Support the Mission
               </a>
@@ -80,8 +93,7 @@ export function Navbar() {
             {/* Mobile burger */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className={`md:hidden transition-colors ${scrolled ? 'text-charcoal' : 'text-parchment'
-                }`}
+              className={`md:hidden transition-colors ${'text-parchment'}`}
               aria-label="Toggle menu"
             >
               {isOpen ? <X size={26} /> : <Menu size={26} />}
@@ -116,7 +128,7 @@ export function Navbar() {
                 <a
                   href="#support"
                   onClick={() => setIsOpen(false)}
-                  className="block mt-4 text-center bg-brass text-charcoal px-6 py-3 text-xs font-semibold uppercase tracking-widest hover:bg-sepia hover:text-parchment transition-colors duration-300"
+                  className="block mt-4 text-center bg-brass text-charcoal px-6 py-3 text-xs font-semibold uppercase tracking-widest hover:bg-sepia hover:text-parchment transition-colors duration-300 rounded-full"
                 >
                   Support the Mission
                 </a>

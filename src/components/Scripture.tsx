@@ -1,4 +1,5 @@
 import { FadeIn } from './FadeIn';
+import { TextReveal } from './TextReveal';
 import { motion } from 'motion/react';
 
 export function Scripture() {
@@ -21,7 +22,7 @@ export function Scripture() {
       <div className="relative z-10 max-w-5xl mx-auto">
 
         {/* Eyebrow */}
-        <FadeIn>
+        <FadeIn variant="reveal">
           <div className="flex items-center justify-center gap-4 mb-12">
             <div className="h-px w-10 bg-brass/40" />
             <span className="font-sans text-[9px] uppercase tracking-[0.35em] text-brass/70">
@@ -31,8 +32,8 @@ export function Scripture() {
           </div>
         </FadeIn>
 
-        {/* The quote */}
-        <FadeIn delay={0.15}>
+        {/* The quote — dramatic reveal */}
+        <FadeIn delay={0.15} variant="reveal" duration={1.3}>
           <blockquote className="font-quote italic text-3xl md:text-5xl lg:text-6xl leading-tight md:leading-snug mb-12 text-parchment/92">
             "As the lightning cometh out of the East,<br className="hidden lg:block" /> and shineth even unto the West;<br className="hidden lg:block" /> so shall also the coming of{' '}
             <span className="text-brass not-italic uppercase tracking-wide">
@@ -43,7 +44,7 @@ export function Scripture() {
         </FadeIn>
 
         {/* Animated citation underline */}
-        <FadeIn delay={0.35}>
+        <FadeIn delay={0.3} variant="fade-up">
           <div className="flex flex-col items-center gap-3">
             <motion.div
               initial={{ scaleX: 0 }}
@@ -60,7 +61,7 @@ export function Scripture() {
         </FadeIn>
 
         {/* Second quote */}
-        <FadeIn delay={0.5}>
+        <FadeIn delay={0.15} variant="reveal" duration={1.2}>
           <div className="mt-20 pt-16 border-t border-parchment/10">
             <blockquote className="font-quote italic text-xl md:text-2xl text-parchment/60 mb-6">
               "We have heard out of the law that Christ abideth for ever: and how sayest thou, The Son of Man must be lifted up? Who is this Son of Man?"
