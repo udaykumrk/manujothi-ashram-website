@@ -1,4 +1,3 @@
-import { X } from 'lucide-react';
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { AshramEmblem } from './AshramEmblem';
@@ -104,34 +103,33 @@ export function Navbar() {
               </a>
             </div>
 
-            {/* Mobile burger */}
+            {/* Mobile Hamburger — Animated bars → X */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden w-12 h-12 flex items-center justify-center rounded-full border border-brass/30 shadow-[0_0_12px_rgba(184,151,104,0.08)] backdrop-blur-sm transition-all duration-300 hover:border-brass/60 hover:shadow-[0_0_18px_rgba(184,151,104,0.15)] active:scale-95"
+              className="hamburger-btn md:hidden w-12 h-12 flex items-center justify-center rounded-full border border-brass/30 shadow-[0_0_12px_rgba(184,151,104,0.08)] backdrop-blur-sm transition-all duration-300 hover:border-brass/60 hover:shadow-[0_0_18px_rgba(184,151,104,0.15)] active:scale-95"
               aria-label="Toggle menu"
+              aria-expanded={isOpen}
             >
-              {isOpen ? <X size={18} strokeWidth={1.5} className="text-brass" /> : (
-                <span className="flex flex-col gap-[5px] w-[20px]">
-                  <span className="block w-[11px] h-[1.5px] bg-gradient-to-r from-brass/50 to-brass rounded-full self-end" />
-                  <span className="block w-[20px] h-[1.5px] bg-gradient-to-r from-parchment/80 to-brass rounded-full" />
-                  <span className="block w-[11px] h-[1.5px] bg-gradient-to-r from-brass to-brass/50 rounded-full self-start" />
-                </span>
-              )}
+              <span className="hamburger-icon" data-open={isOpen}>
+                <span className="hamburger-bar bar-top" />
+                <span className="hamburger-bar bar-mid" />
+                <span className="hamburger-bar bar-bot" />
+              </span>
             </button>
           </div>
         </div>
 
-        {/* Mobile dropdown */}
+        {/* Mobile fullscreen overlay menu */}
         <AnimatePresence>
           {isOpen && (
             <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="md:hidden overflow-hidden bg-parchment border-b border-stone"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              className="mobile-menu-overlay"
             >
-              <div className="px-6 pt-4 pb-6 space-y-1">
+              <div className="mobile-menu-content">
                 {navLinks.map((link, i) => (
                   <motion.a
                     key={link.name}
@@ -140,25 +138,37 @@ export function Navbar() {
                       e.preventDefault();
                       handleMobileNavClick(link.href);
                     }}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                    className="block px-3 py-3.5 text-sm font-medium text-charcoal/80 hover:text-charcoal hover:bg-stone/30 uppercase tracking-widest border-b border-stone/40 last:border-0"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 + i * 0.06, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                    className="mobile-menu-link"
                   >
-                    {link.name}
+                    <span className="mobile-menu-link-number">0{i + 1}</span>
+                    <span className="mobile-menu-link-text">{link.name}</span>
                   </motion.a>
                 ))}
-                <a
+                <motion.a
                   href="#support"
                   onClick={(e) => {
                     e.preventDefault();
                     handleMobileNavClick('#support');
                   }}
-                  className="block mt-4 text-center bg-brass text-charcoal px-6 py-3 text-xs font-semibold uppercase tracking-widest hover:bg-sepia hover:text-parchment transition-colors duration-300 rounded-full"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 + navLinks.length * 0.06, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                  className="mobile-menu-cta"
                 >
                   Support the Mission
-                </a>
+                </motion.a>
               </div>
+
+              {/* Decorative bottom line */}
+              <motion.div
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ delay: 0.5, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                className="mobile-menu-decoration"
+              />
             </motion.div>
           )}
         </AnimatePresence>
@@ -166,4 +176,5 @@ export function Navbar() {
     </>
   );
 }
+
 
