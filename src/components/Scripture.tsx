@@ -4,7 +4,7 @@ import { motion } from 'motion/react';
 
 export function Scripture() {
   return (
-    <section className="relative py-32 md:py-48 px-6 bg-charcoal text-parchment text-center overflow-hidden grain-overlay">
+    <section className="relative py-16 sm:py-32 md:py-48 px-4 sm:px-6 bg-charcoal text-parchment text-center overflow-hidden grain-overlay">
 
       {/* Huge decorative open-quote behind text */}
       <div
@@ -34,7 +34,7 @@ export function Scripture() {
 
         {/* The quote — dramatic reveal */}
         <FadeIn delay={0.15} variant="reveal" duration={1.3}>
-          <blockquote className="font-quote italic text-3xl md:text-5xl lg:text-6xl leading-tight md:leading-snug mb-12 text-parchment/92">
+          <blockquote className="font-quote italic text-xl sm:text-3xl md:text-5xl lg:text-6xl leading-snug md:leading-snug mb-8 sm:mb-12 text-parchment/92">
             "As the lightning cometh out of the East,<br className="hidden lg:block" /> and shineth even unto the West;<br className="hidden lg:block" /> so shall also the coming of{' '}
             <span className="text-brass not-italic uppercase tracking-wide">
               The Son of Man
@@ -63,7 +63,7 @@ export function Scripture() {
         {/* Second quote */}
         <FadeIn delay={0.15} variant="reveal" duration={1.2}>
           <div className="mt-20 pt-16 border-t border-parchment/10">
-            <blockquote className="font-quote italic text-xl md:text-2xl text-parchment/60 mb-6">
+            <blockquote className="font-quote italic text-base sm:text-xl md:text-2xl text-parchment/60 mb-6">
               "We have heard out of the law that Christ abideth for ever: and how sayest thou, The Son of Man must be lifted up? Who is this Son of Man?"
             </blockquote>
             <cite className="font-sans text-[10px] uppercase tracking-[0.3em] text-brass/60 not-italic">

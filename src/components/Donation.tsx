@@ -11,7 +11,7 @@ const microStats = [
 
 export function Donation() {
   return (
-    <section id="support" className="py-32 px-6 bg-charcoal text-parchment">
+    <section id="support" className="py-16 sm:py-32 px-4 sm:px-6 bg-charcoal text-parchment">
       <div className="max-w-4xl mx-auto">
 
         <FadeIn variant="reveal">
@@ -36,11 +36,11 @@ export function Donation() {
 
         {/* Micro-stats row — scale in */}
         <FadeIn delay={0.1} variant="scale">
-          <div className="grid grid-cols-3 gap-0 border border-parchment/10 mb-12 rounded-2xl overflow-hidden">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-0 border border-parchment/10 mb-12 rounded-2xl overflow-hidden">
             {microStats.map((s, i) => (
               <div
                 key={s.label}
-                className={`py-8 px-6 text-center ${i < microStats.length - 1 ? 'border-r border-parchment/10' : ''
+                className={`py-6 px-4 sm:py-8 sm:px-6 text-center ${i < microStats.length - 1 ? 'border-b sm:border-b-0 sm:border-r border-parchment/10' : ''
                   }`}
               >
                 <div className="font-serif text-3xl text-brass mb-2">
@@ -60,10 +60,10 @@ export function Donation() {
         <motion.div
           initial={{ opacity: 0, x: 200 }}
           whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: '-10%' }}
+          viewport={{ once: true, amount: 0 }}
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div className="border border-parchment/10 p-10 md:p-16 text-center grain-overlay rounded-3xl">
+          <div className="border border-parchment/10 p-6 sm:p-10 md:p-16 text-center grain-overlay rounded-3xl">
             <p className="font-quote italic text-lg text-parchment/70 mb-10 leading-relaxed">
               "The light of Manujothi is kept alive by those who believe the truth is worth seeking."
             </p>

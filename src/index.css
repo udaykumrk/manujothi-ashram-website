@@ -140,6 +140,17 @@ section[id] {
   line-height: 1;
 }
 
+/* ─── Responsive overrides ────────────── */
+@media (max-width: 640px) {
+  .drop-cap::first-letter {
+    font-size: 3em;
+  }
+
+  .stat-number {
+    font-size: 1.75rem;
+  }
+}
+
 /* ─── Ticker (infinite scroll bar) ────── */
 @keyframes ticker-scroll {
   from {

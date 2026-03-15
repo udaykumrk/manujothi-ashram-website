@@ -13,7 +13,7 @@ export function Hero() {
   const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
   return (
-    <section ref={ref} className="relative h-screen min-h-[680px] flex items-center justify-center overflow-hidden bg-charcoal">
+    <section ref={ref} className="relative h-screen min-h-[540px] sm:min-h-[680px] flex items-center justify-center overflow-hidden bg-charcoal">
 
       {/* Layer 1 — Dawn image (slow parallax + continuous breathing zoom) */}
       <motion.div
@@ -24,10 +24,13 @@ export function Hero() {
           src={heroImg}
           alt=""
           aria-hidden="true"
+          width={1920}
+          height={1080}
           className="w-full h-full object-cover opacity-30 mix-blend-luminosity"
-          animate={{
+          whileInView={{
             scale: [1.1, 1.18, 1.1],
           }}
+          viewport={{ once: false }}
           transition={{
             duration: 20,
             repeat: Infinity,
@@ -44,12 +47,16 @@ export function Hero() {
         <motion.img
           src={riverImg}
           alt="Manujothi Ashram — Tamirabarani River at golden hour"
+          width={1920}
+          height={1080}
+          fetchPriority="high"
           className="w-full h-full object-cover opacity-80"
           style={{ objectPosition: 'center 80%' }}
-          animate={{
+          whileInView={{
             scale: [1.1, 1.15, 1.1],
             x: ['0%', '1%', '0%'],
           }}
+          viewport={{ once: false }}
           transition={{
             duration: 25,
             repeat: Infinity,
@@ -61,9 +68,10 @@ export function Hero() {
       {/* Layer 3 — Warm golden radial glow (pulsing bloom) */}
       <motion.div
         className="absolute inset-0 z-[2]"
-        animate={{
+        whileInView={{
           opacity: [0.8, 1, 0.8],
         }}
+        viewport={{ once: false }}
         transition={{
           duration: 4,
           repeat: Infinity,
@@ -93,10 +101,11 @@ export function Hero() {
       {/* Content — gentle float */}
       <motion.div
         style={{ opacity }}
-        className="relative z-10 text-center px-6 max-w-5xl mx-auto mt-16"
-        animate={{
+        className="relative z-10 text-center px-4 sm:px-6 max-w-5xl mx-auto mt-8 sm:mt-16"
+        whileInView={{
           y: [0, -6, 0],
         }}
+        viewport={{ once: false }}
         transition={{
           duration: 6,
           repeat: Infinity,
@@ -124,29 +133,29 @@ export function Hero() {
         />
 
         <FadeIn delay={0.4} variant="reveal">
-          <p className="font-sans text-xs uppercase tracking-[0.3em] text-parchment/50 mb-8">
+          <p className="font-sans text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] text-parchment/50 mb-6 sm:mb-8">
             One God. One Nation. — The eternal call of Manujothi Ashram.
           </p>
         </FadeIn>
 
         <FadeIn delay={0.55} variant="fade-up">
-          <p className="font-quote italic text-lg md:text-xl text-parchment/75 max-w-2xl mx-auto mb-12 leading-loose">
+          <p className="font-quote italic text-base sm:text-lg md:text-xl text-parchment/75 max-w-2xl mx-auto mb-8 sm:mb-12 leading-relaxed sm:leading-loose">
             "As the lightning cometh out of the East, and shineth even unto the West; so shall also the coming of the Son of Man be."
           </p>
-          <p className="font-sans text-[10px] uppercase tracking-[0.25em] text-brass mb-12">— Matthew 24:27</p>
+          <p className="font-sans text-[10px] uppercase tracking-[0.25em] text-brass mb-8 sm:mb-12">— Matthew 24:27</p>
         </FadeIn>
 
         <FadeIn delay={0.7} variant="scale">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
               href="#teachings"
-              className="btn-arrow inline-flex items-center gap-3 bg-brass text-charcoal px-8 py-4 text-xs font-semibold uppercase tracking-[0.2em] hover:bg-parchment transition-colors duration-300 rounded-full"
+              className="btn-arrow inline-flex items-center gap-2 sm:gap-3 bg-brass text-charcoal px-5 py-3 sm:px-8 sm:py-4 text-[10px] sm:text-xs font-semibold uppercase tracking-[0.15em] sm:tracking-[0.2em] hover:bg-parchment transition-colors duration-300 rounded-full"
             >
               Explore the Teachings <span className="arrow text-base">→</span>
             </a>
             <a
               href="#visit"
-              className="btn-arrow inline-flex items-center gap-3 border border-parchment/30 text-parchment px-8 py-4 text-xs font-semibold uppercase tracking-[0.2em] hover:bg-parchment/10 transition-colors duration-300 rounded-full"
+              className="btn-arrow inline-flex items-center gap-2 sm:gap-3 border border-parchment/30 text-parchment px-5 py-3 sm:px-8 sm:py-4 text-[10px] sm:text-xs font-semibold uppercase tracking-[0.15em] sm:tracking-[0.2em] hover:bg-parchment/10 transition-colors duration-300 rounded-full"
             >
               Plan Your Visit <span className="arrow text-base">→</span>
             </a>
@@ -155,7 +164,7 @@ export function Hero() {
 
         {/* Scroll indicator */}
         <FadeIn delay={1.2}>
-          <div className="mt-16 flex flex-col items-center gap-2 opacity-40">
+          <div className="mt-8 sm:mt-16 flex flex-col items-center gap-2 opacity-40">
             <div className="w-px h-10 bg-parchment animate-pulse" />
             <span className="font-sans text-[9px] uppercase tracking-[0.3em] text-parchment">Scroll</span>
           </div>

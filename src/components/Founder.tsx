@@ -13,13 +13,13 @@ const stats = [
 
 export function Founder() {
   return (
-    <section className="py-24 md:py-32 bg-stone/25">
-      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+    <section className="py-16 sm:py-24 md:py-32 bg-stone/25">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
 
           {/* Portrait side — slides in from left */}
-          <FadeIn variant="fade-left" className="order-2 lg:order-1">
+          <FadeIn variant="fade-left" className="order-1">
             <div className="relative max-w-md mx-auto lg:max-w-none">
               {/* Decorative offset frame */}
               <div className="absolute -inset-3 border border-brass/25 pointer-events-none z-10 rounded-3xl" />
@@ -44,7 +44,7 @@ export function Founder() {
           </FadeIn>
 
           {/* Text side — slides in from right */}
-          <FadeIn delay={0.15} variant="fade-right" className="order-1 lg:order-2">
+          <FadeIn delay={0.15} variant="fade-right" className="order-2">
             <div className="pt-0 lg:pt-8">
               <FadeIn variant="reveal">
                 <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-brass">
@@ -60,7 +60,7 @@ export function Founder() {
                 stagger={0.06}
               />
 
-              <div className="space-y-5 text-charcoal/75 text-lg leading-relaxed font-light">
+              <div className="space-y-5 text-charcoal/75 text-base sm:text-lg leading-relaxed font-light">
                 <p>
                   Born on February 24, 1921, at the Lakshmi Tea Estate in Munnar, Kerala, to Deva Rasiah and Nesammal, <strong className="font-medium text-charcoal">R. Paulaseer Lawrie Muthukrishna</strong> — known to his followers as <em>Gurudev Shree Lahari Krishna</em> — dedicated his life to a single conviction: that one God calls to all of humanity through all scripture. Educated at St. John's College, Wesley College, and Madras Christian College, he also served at the Vellore Medical College Hospital before devoting himself entirely to his spiritual mission.
                 </p>
@@ -85,7 +85,7 @@ export function Founder() {
                     className="relative"
                     initial={{ opacity: 0, x: -30, y: 20 }}
                     whileInView={{ opacity: 1, x: 0, y: 0 }}
-                    viewport={{ once: true, margin: '-5%' }}
+                    viewport={{ once: true, amount: 0 }}
                     transition={{
                       duration: 0.7,
                       delay: i * 0.2,
@@ -124,9 +124,9 @@ export function Founder() {
 
         {/* Stats bar — scale in with stagger */}
         <FadeIn delay={0.2} variant="fade-up">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-0 mt-20 border border-stone divide-x divide-stone rounded-2xl overflow-hidden">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-0 mt-12 sm:mt-20 border border-stone divide-y sm:divide-y-0 divide-x-0 sm:divide-x divide-stone rounded-2xl overflow-hidden">
             {stats.map((s) => (
-              <div key={s.label} className="py-8 px-6 text-center bg-parchment hover:bg-stone/20 transition-colors duration-300">
+              <div key={s.label} className="py-5 px-4 sm:py-8 sm:px-6 text-center bg-parchment hover:bg-stone/20 transition-colors duration-300">
                 <div className="stat-number">
                   <CountUp end={s.num} suffix={s.suffix} duration={2200} /><span className="text-brass text-xl ml-0.5">{s.unit}</span>
                 </div>

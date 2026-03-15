@@ -15,16 +15,22 @@ export default function App() {
 
   // Scroll-to-top loop: when user scrolls past the footer sentinel, smoothly scroll back to top
   useEffect(() => {
+    let isScrollingToTop = false;
+
     const handleScroll = () => {
+      if (isScrollingToTop) return;
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight;
       const winHeight = window.innerHeight;
 
       // If scrolled to the very bottom (within 5px)
       if (scrollTop + winHeight >= docHeight - 5) {
+        isScrollingToTop = true;
         // Small delay so it feels natural
         setTimeout(() => {
           window.scrollTo({ top: 0, behavior: 'smooth' });
+          // Reset guard after scroll completes
+          setTimeout(() => { isScrollingToTop = false; }, 1500);
         }, 600);
       }
     };

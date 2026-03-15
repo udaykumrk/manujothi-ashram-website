@@ -1,5 +1,5 @@
-import { Menu, X } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { X } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { AshramEmblem } from './AshramEmblem';
 
@@ -8,7 +8,10 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
+    const onScroll = () => {
+      const shouldBeScrolled = window.scrollY > 60;
+      setScrolled(prev => prev === shouldBeScrolled ? prev : shouldBeScrolled);
+    };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -27,6 +30,19 @@ export function Navbar() {
     { name: 'Events', href: '#events' },
   ];
 
+  // Close menu first, then scroll to section after overflow is restored
+  const handleMobileNavClick = useCallback((href: string) => {
+    setIsOpen(false);
+    // Wait for body overflow to be restored before scrolling
+    setTimeout(() => {
+      const id = href.replace('#', '');
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
+  }, []);
+
   return (
     <>
       {/* Brass accent line at the very top */}
@@ -38,7 +54,7 @@ export function Navbar() {
           : 'bg-transparent py-0'
           }`}
       >
-        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
           <div
             className={`flex justify-between items-center transition-all duration-500 ${scrolled ? 'h-16' : 'h-20'
               }`}
@@ -49,19 +65,20 @@ export function Navbar() {
               className="flex items-center gap-3 leading-none group"
               aria-label="Manujothi Ashram Home"
             >
+
               <AshramEmblem
                 size={scrolled ? 36 : 44}
-                className="transition-all duration-500 flex-shrink-0"
+                className="transition-all duration-500 flex-shrink-0 hidden sm:block"
               />
               <span className="flex flex-col">
                 <span
-                  className={`font-serif tracking-wide transition-all duration-500 ${scrolled ? 'text-parchment text-xl' : 'text-parchment text-2xl'
+                  className={`font-serif tracking-wide transition-all duration-500 ${scrolled ? 'text-parchment text-base sm:text-xl' : 'text-parchment text-lg sm:text-2xl'
                     }`}
                 >
                   Manujothi Ashram
                 </span>
                 <span
-                  className={`font-sans text-[10px] uppercase tracking-[0.25em] transition-all duration-500 ${'text-brass/80'}`}
+                  className={`font-sans text-[8px] sm:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.25em] transition-all duration-500 ${'text-brass/80'}`}
                 >
                   Tirunelveli · Est. 1963
                 </span>
@@ -74,10 +91,7 @@ export function Navbar() {
                 <a
                   key={link.name}
                   href={link.href}
-                  className={`animated-link text-xs font-medium uppercase tracking-[0.15em] transition-colors duration-300 ${scrolled
-                    ? 'text-parchment/80 hover:text-parchment'
-                    : 'text-parchment/80 hover:text-parchment'
-                    }`}
+                  className="animated-link text-xs font-medium uppercase tracking-[0.15em] transition-colors duration-300 text-parchment/80 hover:text-parchment"
                 >
                   {link.name}
                 </a>
@@ -93,10 +107,16 @@ export function Navbar() {
             {/* Mobile burger */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className={`md:hidden transition-colors ${'text-parchment'}`}
+              className="md:hidden w-12 h-12 flex items-center justify-center rounded-full border border-brass/30 shadow-[0_0_12px_rgba(184,151,104,0.08)] backdrop-blur-sm transition-all duration-300 hover:border-brass/60 hover:shadow-[0_0_18px_rgba(184,151,104,0.15)] active:scale-95"
               aria-label="Toggle menu"
             >
-              {isOpen ? <X size={26} /> : <Menu size={26} />}
+              {isOpen ? <X size={18} strokeWidth={1.5} className="text-brass" /> : (
+                <span className="flex flex-col gap-[5px] w-[20px]">
+                  <span className="block w-[11px] h-[1.5px] bg-gradient-to-r from-brass/50 to-brass rounded-full self-end" />
+                  <span className="block w-[20px] h-[1.5px] bg-gradient-to-r from-parchment/80 to-brass rounded-full" />
+                  <span className="block w-[11px] h-[1.5px] bg-gradient-to-r from-brass to-brass/50 rounded-full self-start" />
+                </span>
+              )}
             </button>
           </div>
         </div>
@@ -116,7 +136,10 @@ export function Navbar() {
                   <motion.a
                     key={link.name}
                     href={link.href}
-                    onClick={() => setIsOpen(false)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleMobileNavClick(link.href);
+                    }}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.05 }}
@@ -127,7 +150,10 @@ export function Navbar() {
                 ))}
                 <a
                   href="#support"
-                  onClick={() => setIsOpen(false)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleMobileNavClick('#support');
+                  }}
                   className="block mt-4 text-center bg-brass text-charcoal px-6 py-3 text-xs font-semibold uppercase tracking-widest hover:bg-sepia hover:text-parchment transition-colors duration-300 rounded-full"
                 >
                   Support the Mission
@@ -140,3 +166,4 @@ export function Navbar() {
     </>
   );
 }
+

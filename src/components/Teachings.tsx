@@ -123,7 +123,7 @@ const AmazonIcon = () => (
 export function Teachings() {
   const scrollRef = useRef<HTMLDivElement>(null);
   return (
-    <section id="teachings" className="py-32 px-6 bg-parchment">
+    <section id="teachings" className="py-16 sm:py-32 px-4 sm:px-6 bg-parchment">
       <div className="max-w-7xl mx-auto">
 
         {/* Header */}
@@ -162,6 +162,7 @@ export function Teachings() {
                   boxShadow: '0 35px 60px -15px rgba(0, 0, 0, 0.45), 0 20px 35px -10px rgba(184, 151, 104, 0.25)',
                   zIndex: 10,
                 }}
+                whileTap={{ scale: 1.02 }}
                 transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                 className="group relative h-full flex flex-col overflow-hidden cursor-pointer rounded-2xl"
                 style={{ zIndex: 1 }}
@@ -180,7 +181,7 @@ export function Teachings() {
                 <div className="absolute inset-0 z-[1] bg-gradient-to-t from-charcoal via-charcoal/85 to-charcoal/50 group-hover:from-charcoal group-hover:via-charcoal/90 group-hover:to-charcoal/60 transition-all duration-500" />
 
                 {/* Content */}
-                <div className="relative z-[2] p-10 flex flex-col h-full">
+                <div className="relative z-[2] p-6 sm:p-10 flex flex-col h-full">
                   <div className="flex items-center justify-between mb-6">
                     <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-brass">{item.category}</span>
                     <span className="font-quote italic text-xs text-parchment/40">{item.scriptureRef}</span>
@@ -249,7 +250,7 @@ export function Teachings() {
                     books.map((book) => (
                       <div
                         key={`${copy}-${book.title}`}
-                        className="group relative flex-shrink-0 w-[300px] h-[400px] rounded-2xl overflow-hidden mx-3"
+                        className="group relative flex-shrink-0 w-[220px] h-[310px] sm:w-[300px] sm:h-[400px] rounded-2xl overflow-hidden mx-2 sm:mx-3"
                       >
                         {/* Book cover image */}
                         <img
@@ -261,7 +262,7 @@ export function Teachings() {
                         {/* Bottom gradient — hidden by default, slides up on hover */}
                         <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                        {/* Content overlay — hidden, slides up on hover */}
+                        {/* Content overlay — hidden, slides up on hover/tap */}
                         <div className="absolute bottom-0 left-0 right-0 p-5 flex flex-col z-[2] opacity-0 translate-y-6 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-out">
                           {/* Volume / language pill */}
                           <span className="font-sans text-[9px] uppercase tracking-[0.2em] text-brass/80 mb-1">
@@ -297,14 +298,14 @@ export function Teachings() {
             </div>
 
             {/* Bottom bar */}
-            <div className="mt-4 bg-charcoal text-parchment flex flex-col sm:flex-row items-center justify-between gap-4 px-8 py-5 rounded-2xl">
+            <div className="mt-4 bg-charcoal text-parchment flex flex-col items-center justify-between gap-4 px-5 py-4 sm:px-8 sm:py-5 rounded-2xl sm:flex-row">
               <p className="font-sans text-xs text-parchment/50">
                 All Ashram publications are distributed free of charge to genuine seekers.
               </p>
-              <div className="flex flex-wrap gap-3 flex-shrink-0">
+                <div className="flex flex-col sm:flex-row flex-wrap gap-3 flex-shrink-0 w-full sm:w-auto">
                 <a
                   href="mailto:ashram@manjothi.com?subject=Request%20Free%20Publications"
-                  className="btn-arrow inline-flex items-center gap-2 bg-brass text-charcoal px-5 py-2.5 text-[9px] font-bold uppercase tracking-widest hover:bg-parchment transition-colors duration-300 rounded-full"
+                  className="btn-arrow inline-flex items-center gap-2 bg-brass text-charcoal px-5 py-2.5 text-[9px] font-bold uppercase tracking-widest hover:bg-parchment transition-colors duration-300 rounded-full w-full sm:w-auto"
                 >
                   Request Free Copies <span className="arrow">→</span>
                 </a>

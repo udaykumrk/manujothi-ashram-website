@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head><title>Video Frame Viewer</title></head>
+<body style="background:#111;color:#fff;text-align:center;font-family:sans-serif;padding:20px">
+<h2>Video Frame Viewer</h2>
+<video id="vid" width="900" controls preload="auto">
+  <source src="/star_video.mp4" type="video/mp4">
+</video>
+<br><br>
+<div>
+  <button onclick="seekTo(0)">0s</button>
+  <button onclick="seekTo(2)">2s</button>
+  <button onclick="seekTo(5)">5s</button>
+  <button onclick="seekTo(10)">10s</button>
+  <button onclick="seekTo(15)">15s</button>
+  <button onclick="seekTo(20)">20s</button>
+  <button onclick="seekTo(30)">30s</button>
+  <button onclick="seekTo(40)">40s</button>
+  <button onclick="seekTo(50)">50s</button>
+  <button onclick="seekTo(55)">55s</button>
+  <button onclick="seekTo(60)">60s</button>
+</div>
+<p id="info">Loading...</p>
+<script>
+const vid = document.getElementById('vid');
+const info = document.getElementById('info');
+vid.addEventListener('loadedmetadata', () => {
+  info.textContent = 'Duration: ' + vid.duration.toFixed(1) + 's. Click a button to seek.';
+});
+vid.addEventListener('timeupdate', () => {
+  info.textContent = 'Current time: ' + vid.currentTime.toFixed(2) + 's / ' + vid.duration.toFixed(1) + 's';
+});
+function seekTo(t) {
+  vid.currentTime = t;
+  vid.pause();
+}
+</script>
+</body>
+</html>
