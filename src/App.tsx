@@ -40,7 +40,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-parchment text-charcoal font-sans selection:bg-brass/30 selection:text-charcoal">
+    <div className="min-h-screen overflow-x-hidden bg-parchment text-charcoal font-sans selection:bg-brass/30 selection:text-charcoal">
       <Navbar />
       <main aria-label="Main content">
         <Hero />
