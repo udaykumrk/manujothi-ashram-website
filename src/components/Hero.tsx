@@ -114,12 +114,12 @@ export function Hero() {
       >
         {/* Eyebrow */}
         <FadeIn variant="reveal">
-          <div className="flex items-center justify-center gap-4 mb-8">
-            <div className="h-px w-12 bg-brass/60" />
-            <span className="font-sans text-[10px] uppercase tracking-[0.35em] text-brass/90">
+          <div className="flex items-center justify-center gap-2 sm:gap-4 mb-8">
+            <div className="hidden sm:block h-px w-12 bg-brass/60" />
+            <span className="font-sans text-[8px] sm:text-[10px] uppercase tracking-[0.1em] sm:tracking-[0.35em] text-brass/90 text-center">
               Tirunelveli, Tamil Nadu · Since 1963
             </span>
-            <div className="h-px w-12 bg-brass/60" />
+            <div className="hidden sm:block h-px w-12 bg-brass/60" />
           </div>
         </FadeIn>
 

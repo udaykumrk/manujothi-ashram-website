@@ -48,7 +48,7 @@ export function Navbar() {
       <div className="fixed top-0 left-0 w-full h-[2px] bg-brass z-[60]" />
 
       <nav
-        className={`fixed top-[2px] w-full z-50 transition-all duration-500 ${scrolled
+        className={`fixed left-0 top-[2px] w-full z-50 transition-all duration-500 ${scrolled
           ? 'bg-charcoal/30 backdrop-blur-xl shadow-lg border-b border-brass/20 py-0'
           : 'bg-transparent py-0'
           }`}
@@ -69,15 +69,15 @@ export function Navbar() {
                 size={scrolled ? 36 : 44}
                 className="transition-all duration-500 flex-shrink-0 hidden sm:block"
               />
-              <span className="flex flex-col">
+              <span className="flex flex-col min-w-0">
                 <span
-                  className={`font-serif tracking-wide transition-all duration-500 ${scrolled ? 'text-parchment text-base sm:text-xl' : 'text-parchment text-lg sm:text-2xl'
+                  className={`font-serif tracking-wide truncate transition-all duration-500 ${scrolled ? 'text-parchment text-base sm:text-xl' : 'text-parchment text-lg sm:text-2xl'
                     }`}
                 >
                   Manujothi Ashram
                 </span>
                 <span
-                  className={`font-sans text-[8px] sm:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.25em] transition-all duration-500 ${'text-brass/80'}`}
+                  className={`font-sans text-[8px] sm:text-[10px] uppercase truncate tracking-[0.15em] sm:tracking-[0.25em] transition-all duration-500 ${'text-brass/80'}`}
                 >
                   Tirunelveli · Est. 1963
                 </span>
@@ -106,7 +106,7 @@ export function Navbar() {
             {/* Mobile Hamburger — Animated bars → X */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="hamburger-btn md:hidden w-12 h-12 flex items-center justify-center rounded-full border border-brass/30 shadow-[0_0_12px_rgba(184,151,104,0.08)] backdrop-blur-sm transition-all duration-300 hover:border-brass/60 hover:shadow-[0_0_18px_rgba(184,151,104,0.15)] active:scale-95"
+              className="hamburger-btn md:hidden w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-full border border-brass/30 shadow-[0_0_12px_rgba(184,151,104,0.08)] backdrop-blur-sm transition-all duration-300 hover:border-brass/60 hover:shadow-[0_0_18px_rgba(184,151,104,0.15)] active:scale-95"
               aria-label="Toggle menu"
               aria-expanded={isOpen}
             >

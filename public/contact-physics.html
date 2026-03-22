@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — Creative Studio</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            neon: {
+              cyan: '#00f0ff',
+              purple: '#a855f7',
+              pink: '#f472b6',
+              blue: '#3b82f6',
+            },
+            dark: {
+              900: '#0a0a0f',
+              800: '#12121a',
+              700: '#1a1a2e',
+              600: '#252540',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Matter.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+
+  <!-- Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: #0a0a0f;
+      color: #e0e0e0;
+      font-family: 'Inter', system-ui, sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── Grain overlay ─── */
+    .grain::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      mix-blend-mode: overlay;
+    }
+
+    /* ─── Physics canvas — invisible, just for simulation ─── */
+    #physics-canvas {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ─── Photo cards ─── */
+    .photo-card {
+      position: absolute;
+      cursor: grab;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+      z-index: 10;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #1a1a2e;
+      border: 2px solid rgba(255, 255, 255, 0.06);
+      box-shadow:
+        0 25px 60px rgba(0, 0, 0, 0.6),
+        0 8px 25px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      transition: box-shadow 0.4s ease, border-color 0.4s ease;
+      will-change: transform;
+      transform-style: preserve-3d;
+      perspective: 800px;
+    }
+
+    .photo-card:active { cursor: grabbing; }
+
+    .photo-card:hover {
+      border-color: rgba(0, 240, 255, 0.25);
+      box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.7),
+        0 12px 35px rgba(0, 0, 0, 0.4),
+        0 0 60px rgba(0, 240, 255, 0.08),
+        0 0 120px rgba(0, 240, 255, 0.04),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .photo-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+      transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .photo-card:hover img {
+      transform: scale(1.08);
+    }
+
+    /* Card label */
+    .card-label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 12px 16px;
+      background: linear-gradient(0deg, rgba(10, 10, 15, 0.95) 0%, rgba(10, 10, 15, 0) 100%);
+      font-family: 'Space Grotesk', system-ui, sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: rgba(255, 255, 255, 0.7);
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .photo-card:hover .card-label {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── 3D Background scene ─── */
+    #three-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ─── Glow effects ─── */
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      opacity: 0.15;
+      transition: transform 0.8s ease;
+    }
+
+    /* ─── Container ─── */
+    #contact-section {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    #physics-container {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    /* ─── Scroll indicator ─── */
+    .scroll-indicator {
+      animation: bob 2.5s ease-in-out infinite;
+    }
+
+    @keyframes bob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(8px); }
+    }
+
+    /* ─── Subtle pulse ─── */
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 0.12; transform: scale(1); }
+      50% { opacity: 0.2; transform: scale(1.05); }
+    }
+
+    .pulse-slow { animation: pulse-glow 6s ease-in-out infinite; }
+
+    /* ─── Floating particles ─── */
+    .particle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: rgba(0, 240, 255, 0.4);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: float-particle linear infinite;
+    }
+
+    @keyframes float-particle {
+      0% { transform: translateY(0) translateX(0); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
+    }
+
+    /* ─── Mobile adjustments ─── */
+    @media (max-width: 768px) {
+      .photo-card {
+        border-radius: 12px;
+      }
+    }
+
+    /* ─── Magnetic cursor ─── */
+    .magnetic-cursor {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      border: 1.5px solid rgba(0, 240, 255, 0.5);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transition: width 0.3s, height 0.3s, border-color 0.3s, transform 0.15s ease-out;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: difference;
+    }
+
+    .magnetic-cursor.hovering {
+      width: 50px;
+      height: 50px;
+      border-color: rgba(0, 240, 255, 0.8);
+    }
+
+    .magnetic-cursor.dragging {
+      width: 12px;
+      height: 12px;
+      border-color: rgba(168, 85, 247, 0.8);
+      background: rgba(168, 85, 247, 0.2);
+    }
+  </style>
+</head>
+
+<body class="grain">
+
+  <!-- Custom cursor -->
+  <div class="magnetic-cursor" id="cursor"></div>
+
+  <!-- Three.js 3D Background -->
+  <canvas id="three-bg"></canvas>
+
+  <!-- ════════════ CONTACT SECTION ════════════ -->
+  <section id="contact-section" class="relative flex flex-col items-center justify-center min-h-screen">
+
+    <!-- Ambient glow orbs -->
+    <div class="glow-orb pulse-slow" style="width:600px;height:600px;background:radial-gradient(circle,rgba(0,240,255,0.15),transparent 70%);top:-10%;left:-15%;"></div>
+    <div class="glow-orb pulse-slow" style="width:500px;height:500px;background:radial-gradient(circle,rgba(168,85,247,0.12),transparent 70%);bottom:-20%;right:-10%;animation-delay:2s;"></div>
+    <div class="glow-orb" style="width:300px;height:300px;background:radial-gradient(circle,rgba(244,114,182,0.1),transparent 70%);top:40%;left:50%;"></div>
+
+    <!-- Floating particles -->
+    <div id="particles"></div>
+
+    <!-- Center content -->
+    <div class="relative z-20 text-center px-6 pointer-events-none select-none" id="center-content">
+      <div class="mb-4">
+        <span class="inline-block px-4 py-1.5 rounded-full border border-white/10 bg-white/[0.03] text-[10px] font-semibold uppercase tracking-[0.3em] text-cyan-300/70 backdrop-blur-sm">
+          Get in Touch
+        </span>
+      </div>
+
+      <h1 class="font-display text-[clamp(4rem,12vw,10rem)] font-bold leading-[0.85] tracking-tight mb-4" style="background:linear-gradient(135deg,#fff 0%,#00f0ff 40%,#a855f7 70%,#f472b6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+        C
+      </h1>
+
+      <p class="text-sm md:text-base text-white/30 font-light tracking-wide max-w-md mx-auto mb-8 leading-relaxed">
+        Where ideas float freely
+      </p>
+
+      <a href="mailto:hello@studio.com" class="pointer-events-auto inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-white/10 text-white/80 text-sm font-medium tracking-wide hover:border-cyan-400/30 hover:text-white transition-all duration-500 backdrop-blur-md group">
+        <span>Start a conversation</span>
+        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+      </a>
+
+      <!-- Scroll indicator -->
+      <div class="scroll-indicator mt-16 text-white/15">
+        <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+      </div>
+    </div>
+
+    <!-- Physics container — cards go here -->
+    <div id="physics-container"></div>
+  </section>
+
+  <!-- ════════════ SCRIPTS ════════════ -->
+  <script>
+  (function() {
+    'use strict';
+
+    // ─── CONFIG ─────────────────────────────
+    const CARD_DATA = [
+      {
+        img: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&h=300&fit=crop&q=80',
+        label: 'Abstract Art',
+        w: 220, h: 165,
+        neonColor: 'rgba(0,240,255,0.15)',
+      },
+      {
+        img: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop&q=80',
+        label: 'Product Design',
+        w: 200, h: 150,
+        neonColor: 'rgba(168,85,247,0.15)',
+      },
+      {
+        img: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&h=300&fit=crop&q=80',
+        label: 'Brand Identity',
+        w: 240, h: 180,
+        neonColor: 'rgba(244,114,182,0.15)',
+      },
+      {
+        img: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=400&h=300&fit=crop&q=80',
+        label: 'Creative Vision',
+        w: 190, h: 143,
+        neonColor: 'rgba(59,130,246,0.15)',
+      },
+      {
+        img: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400&h=300&fit=crop&q=80',
+        label: 'Digital Craft',
+        w: 210, h: 158,
+        neonColor: 'rgba(0,240,255,0.12)',
+      }
+    ];
+
+    // Mobile detection
+    const isMobile = window.innerWidth < 768;
+    const scaleFactor = isMobile ? 0.6 : 1;
+
+    // ─── MATTER.JS SETUP ────────────────────
+    const { Engine, Render, Runner, Bodies, Body, Composite, Mouse, MouseConstraint, Events } = Matter;
+
+    const section = document.getElementById('contact-section');
+    const container = document.getElementById('physics-container');
+
+    let sectionW = section.offsetWidth;
+    let sectionH = section.offsetHeight;
+
+    // Create physics engine
+    const engine = Engine.create({
+      gravity: { x: 0, y: 0.35, scale: 0.001 } // Gentle gravity — anti-gravity feel
+    });
+    const world = engine.world;
+
+    // Create invisible walls
+    const wallThickness = 60;
+    const walls = [
+      // floor
+      Bodies.rectangle(sectionW / 2, sectionH + wallThickness / 2, sectionW + 200, wallThickness, { isStatic: true, friction: 0.8, restitution: 0.3 }),
+      // ceiling
+      Bodies.rectangle(sectionW / 2, -wallThickness / 2, sectionW + 200, wallThickness, { isStatic: true, restitution: 0.2 }),
+      // left wall
+      Bodies.rectangle(-wallThickness / 2, sectionH / 2, wallThickness, sectionH + 200, { isStatic: true, restitution: 0.3 }),
+      // right wall
+      Bodies.rectangle(sectionW + wallThickness / 2, sectionH / 2, wallThickness, sectionH + 200, { isStatic: true, restitution: 0.3 })
+    ];
+    Composite.add(world, walls);
+
+    // Spawn cards as physics bodies + DOM elements
+    const cardBodies = [];
+    const cardElements = [];
+
+    CARD_DATA.forEach((data, i) => {
+      const w = data.w * scaleFactor;
+      const h = data.h * scaleFactor;
+
+      // Random spawn position (upper portion)
+      const x = sectionW * 0.15 + Math.random() * sectionW * 0.7;
+      const y = sectionH * 0.1 + Math.random() * sectionH * 0.35;
+      const angle = (Math.random() - 0.5) * 0.5; // slight random rotation
+
+      // Physics body
+      const body = Bodies.rectangle(x, y, w, h, {
+        chamfer: { radius: 12 * scaleFactor },
+        restitution: 0.4,   // bouncy
+        friction: 0.3,
+        frictionAir: 0.02,  // air resistance for floaty feel
+        density: 0.002,
+        angle: angle,
+      });
+
+      // Give a slight random initial velocity for floating feel
+      Body.setVelocity(body, {
+        x: (Math.random() - 0.5) * 2,
+        y: (Math.random() - 0.5) * 1.5
+      });
+
+      Composite.add(world, body);
+      cardBodies.push(body);
+
+      // DOM element
+      const el = document.createElement('div');
+      el.className = 'photo-card';
+      el.style.width = w + 'px';
+      el.style.height = h + 'px';
+      el.innerHTML = `
+        <img src="${data.img}" alt="${data.label}" loading="eager" draggable="false" />
+        <div class="card-label">${data.label}</div>
+      `;
+      container.appendChild(el);
+      cardElements.push(el);
+    });
+
+    // ─── MOUSE CONSTRAINT (drag) ────────────
+    const canvasForMouse = container;
+    const mouse = Mouse.create(canvasForMouse);
+
+    // Fix for high-DPI / scroll offset
+    mouse.element.removeEventListener('mousewheel', mouse.mousewheel);
+    mouse.element.removeEventListener('DOMMouseScroll', mouse.mousewheel);
+
+    const mouseConstraint = MouseConstraint.create(engine, {
+      mouse: mouse,
+      constraint: {
+        stiffness: 0.6,
+        damping: 0.15,
+        render: { visible: false }
+      }
+    });
+    Composite.add(world, mouseConstraint);
+
+    // ─── TOUCH SUPPORT ──────────────────────
+    let touchBody = null;
+
+    container.addEventListener('touchstart', (e) => {
+      const touch = e.touches[0];
+      const rect = container.getBoundingClientRect();
+      const px = touch.clientX - rect.left;
+      const py = touch.clientY - rect.top;
+
+      for (let i = cardBodies.length - 1; i >= 0; i--) {
+        const b = cardBodies[i];
+        if (Matter.Bounds.contains(b.bounds, { x: px, y: py })) {
+          touchBody = b;
+          break;
+        }
+      }
+    }, { passive: true });
+
+    container.addEventListener('touchmove', (e) => {
+      if (!touchBody) return;
+      e.preventDefault();
+      const touch = e.touches[0];
+      const rect = container.getBoundingClientRect();
+      const px = touch.clientX - rect.left;
+      const py = touch.clientY - rect.top;
+      Body.setPosition(touchBody, { x: px, y: py });
+      Body.setVelocity(touchBody, { x: 0, y: 0 });
+    }, { passive: false });
+
+    container.addEventListener('touchend', () => {
+      if (touchBody) {
+        Body.setVelocity(touchBody, { x: (Math.random()-0.5)*4, y: -2 });
+      }
+      touchBody = null;
+    }, { passive: true });
+
+    // ─── CUSTOM CURSOR ──────────────────────
+    const cursor = document.getElementById('cursor');
+    let mouseX = 0, mouseY = 0;
+
+    if (!isMobile) {
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+      });
+
+      Events.on(mouseConstraint, 'startdrag', () => {
+        cursor.classList.add('dragging');
+        cursor.classList.remove('hovering');
+      });
+
+      Events.on(mouseConstraint, 'enddrag', () => {
+        cursor.classList.remove('dragging');
+      });
+
+      // Detect hover on cards
+      container.addEventListener('mouseover', (e) => {
+        if (e.target.closest('.photo-card')) {
+          cursor.classList.add('hovering');
+        }
+      });
+      container.addEventListener('mouseout', (e) => {
+        if (e.target.closest('.photo-card')) {
+          cursor.classList.remove('hovering');
+        }
+      });
+    } else {
+      cursor.style.display = 'none';
+    }
+
+    // ─── ANTI-GRAVITY FORCE (gentle upward float) ─────
+    Events.on(engine, 'beforeUpdate', () => {
+      cardBodies.forEach((body) => {
+        // Subtle upward anti-gravity burst when cards are low
+        if (body.position.y > sectionH * 0.7) {
+          Body.applyForce(body, body.position, { x: 0, y: -0.0006 * body.mass });
+        }
+
+        // Very gentle random drift for "floating" feel
+        if (Math.random() < 0.02) {
+          Body.applyForce(body, body.position, {
+            x: (Math.random() - 0.5) * 0.00015,
+            y: (Math.random() - 0.5) * 0.0001
+          });
+        }
+      });
+    });
+
+    // ─── GYROSCOPE (device tilt) ────────────
+    if (window.DeviceOrientationEvent) {
+      window.addEventListener('deviceorientation', (e) => {
+        const gamma = (e.gamma || 0) / 90; // left/right tilt [-1, 1]
+        const beta = ((e.beta || 0) - 45) / 90;  // forward/back tilt
+
+        // Apply tilt as gravity direction
+        engine.gravity.x = gamma * 0.8;
+        engine.gravity.y = 0.35 + beta * 0.5;
+      }, { passive: true });
+    }
+
+    // ─── SCROLL PARALLAX ────────────────────
+    const centerContent = document.getElementById('center-content');
+    let scrollY = 0;
+
+    window.addEventListener('scroll', () => {
+      scrollY = window.pageYOffset;
+      const factor = scrollY * 0.3;
+      centerContent.style.transform = `translateY(${factor}px)`;
+      centerContent.style.opacity = Math.max(0, 1 - scrollY / 600);
+    }, { passive: true });
+
+    // ─── RENDER LOOP (60fps sync) ───────────
+    const runner = Runner.create();
+    Runner.run(runner, engine);
+
+    function renderLoop() {
+      for (let i = 0; i < cardBodies.length; i++) {
+        const body = cardBodies[i];
+        const el = cardElements[i];
+        const data = CARD_DATA[i];
+        const w = data.w * scaleFactor;
+        const h = data.h * scaleFactor;
+
+        const x = body.position.x - w / 2;
+        const y = body.position.y - h / 2;
+        const angle = body.angle * (180 / Math.PI);
+
+        el.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${angle}deg)`;
+      }
+
+      requestAnimationFrame(renderLoop);
+    }
+    requestAnimationFrame(renderLoop);
+
+    // ─── THREE.JS 3D BACKGROUND ────────────
+    (function initThreeBackground() {
+      const canvas = document.getElementById('three-bg');
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
+      camera.position.z = 30;
+
+      // Floating 3D particles
+      const particleCount = isMobile ? 80 : 200;
+      const geometry = new THREE.BufferGeometry();
+      const positions = new Float32Array(particleCount * 3);
+      const colors = new Float32Array(particleCount * 3);
+
+      const neonColors = [
+        [0, 0.94, 1],      // cyan
+        [0.66, 0.33, 0.97], // purple
+        [0.96, 0.45, 0.7],  // pink
+        [0.23, 0.51, 0.96], // blue
+      ];
+
+      for (let i = 0; i < particleCount; i++) {
+        positions[i * 3] = (Math.random() - 0.5) * 60;
+        positions[i * 3 + 1] = (Math.random() - 0.5) * 40;
+        positions[i * 3 + 2] = (Math.random() - 0.5) * 30;
+
+        const c = neonColors[Math.floor(Math.random() * neonColors.length)];
+        colors[i * 3] = c[0];
+        colors[i * 3 + 1] = c[1];
+        colors[i * 3 + 2] = c[2];
+      }
+
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+      const material = new THREE.PointsMaterial({
+        size: isMobile ? 0.08 : 0.06,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.6,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      });
+
+      const points = new THREE.Points(geometry, material);
+      scene.add(points);
+
+      // Wireframe icosahedron (floating geometry)
+      const icoGeo = new THREE.IcosahedronGeometry(4, 1);
+      const icoMat = new THREE.MeshBasicMaterial({
+        color: 0x00f0ff,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.04,
+      });
+      const ico = new THREE.Mesh(icoGeo, icoMat);
+      ico.position.set(8, -3, -5);
+      scene.add(ico);
+
+      // Torus knot (another floating geometry)
+      const torusGeo = new THREE.TorusKnotGeometry(2.5, 0.4, 80, 12);
+      const torusMat = new THREE.MeshBasicMaterial({
+        color: 0xa855f7,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.03,
+      });
+      const torus = new THREE.Mesh(torusGeo, torusMat);
+      torus.position.set(-10, 4, -8);
+      scene.add(torus);
+
+      // Mouse orbit (parallax)
+      let targetRotX = 0, targetRotY = 0;
+      document.addEventListener('mousemove', (e) => {
+        targetRotX = (e.clientY / window.innerHeight - 0.5) * 0.3;
+        targetRotY = (e.clientX / window.innerWidth - 0.5) * 0.3;
+      });
+
+      function animate() {
+        requestAnimationFrame(animate);
+
+        const t = Date.now() * 0.0003;
+
+        // Gentle particle drift
+        const pos = geometry.attributes.position.array;
+        for (let i = 0; i < particleCount; i++) {
+          pos[i * 3 + 1] += Math.sin(t + i * 0.1) * 0.003;
+          pos[i * 3] += Math.cos(t + i * 0.05) * 0.002;
+        }
+        geometry.attributes.position.needsUpdate = true;
+
+        // Rotate geometries
+        ico.rotation.x += 0.002;
+        ico.rotation.y += 0.003;
+        torus.rotation.x += 0.001;
+        torus.rotation.y -= 0.002;
+
+        // Mouse orbit
+        scene.rotation.x += (targetRotX - scene.rotation.x) * 0.02;
+        scene.rotation.y += (targetRotY - scene.rotation.y) * 0.02;
+
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+      });
+    })();
+
+    // ─── FLOATING PARTICLES (DOM) ───────────
+    (function createParticles() {
+      const cont = document.getElementById('particles');
+      const count = isMobile ? 15 : 30;
+
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.bottom = '-10px';
+        p.style.animationDuration = (8 + Math.random() * 15) + 's';
+        p.style.animationDelay = Math.random() * 10 + 's';
+        p.style.width = (1 + Math.random() * 2) + 'px';
+        p.style.height = p.style.width;
+        p.style.opacity = 0.2 + Math.random() * 0.4;
+
+        const colors = ['rgba(0,240,255,0.5)', 'rgba(168,85,247,0.4)', 'rgba(244,114,182,0.3)'];
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+        cont.appendChild(p);
+      }
+    })();
+
+    // ─── RESIZE HANDLER ─────────────────────
+    window.addEventListener('resize', () => {
+      sectionW = section.offsetWidth;
+      sectionH = section.offsetHeight;
+
+      // Update walls
+      Body.setPosition(walls[0], { x: sectionW / 2, y: sectionH + wallThickness / 2 });
+      Body.setPosition(walls[1], { x: sectionW / 2, y: -wallThickness / 2 });
+      Body.setPosition(walls[2], { x: -wallThickness / 2, y: sectionH / 2 });
+      Body.setPosition(walls[3], { x: sectionW + wallThickness / 2, y: sectionH / 2 });
+
+      // Resize the wall dimensions
+      Body.setVertices(walls[0], Bodies.rectangle(sectionW / 2, sectionH + wallThickness / 2, sectionW + 200, wallThickness).vertices);
+      Body.setVertices(walls[1], Bodies.rectangle(sectionW / 2, -wallThickness / 2, sectionW + 200, wallThickness).vertices);
+      Body.setVertices(walls[2], Bodies.rectangle(-wallThickness / 2, sectionH / 2, wallThickness, sectionH + 200).vertices);
+      Body.setVertices(walls[3], Bodies.rectangle(sectionW + wallThickness / 2, sectionH / 2, wallThickness, sectionH + 200).vertices);
+    });
+
+    // ─── ANTI-GRAVITY TOGGLE (click background) ────
+    let antiGravity = false;
+    section.addEventListener('dblclick', (e) => {
+      if (e.target.closest('.photo-card')) return;
+      antiGravity = !antiGravity;
+      if (antiGravity) {
+        engine.gravity.y = -0.3;
+        cardBodies.forEach(b => {
+          Body.applyForce(b, b.position, { x: (Math.random()-0.5)*0.005, y: -0.005 });
+        });
+      } else {
+        engine.gravity.y = 0.35;
+      }
+    });
+
+  })();
+  </script>
+
+</body>
+</html>
