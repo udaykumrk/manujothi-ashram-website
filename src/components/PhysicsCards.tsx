@@ -2,7 +2,7 @@ import { useRef, useEffect, useState } from 'react';
 import Matter from 'matter-js';
 import { motion, useInView } from 'motion/react';
 
-/* ─── Card data — clean icon + brand color design ─── */
+/* ─── Card data — exact match to Vercel deployment ─── */
 const CARDS = [
   {
     name: 'YouTube',
@@ -34,73 +34,74 @@ const CARDS = [
   },
 ];
 
-const CARD_W = 110;
-const CARD_H = 110;
+const CARD_W = 85;
+const CARD_H = 85;
 
 export function PhysicsCards() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(sectionRef, { once: true, margin: '0px' });
+  const isInView = useInView(sectionRef, { once: true, margin: '-50px' });
   const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
     if (!isInView || initialized) return;
-    const container = containerRef.current;
-    if (!container) return;
+    const scene = containerRef.current;
+    if (!scene) return;
 
     requestAnimationFrame(() => {
-      const cW = container.clientWidth;
-      const cH = container.clientHeight;
-
+      const cW = scene.clientWidth;
+      const cH = scene.clientHeight;
       if (cW < 50 || cH < 50) return;
       setInitialized(true);
 
+      const { Engine, Bodies, Body, Composite, Bounds } = Matter;
+
+      // Slow-motion gravity — feels like low gravity / floating in space
+      const engine = Engine.create({
+        gravity: { x: 0, y: 1.2, scale: 0.001 }, // normal fall speed
+      });
+
+      // ─── Walls — EXACT Vercel values ───
+      const wallThick = 50;
+      const ground = Bodies.rectangle(cW / 2, cH + wallThick / 2, cW * 3, wallThick, {
+        isStatic: true, restitution: 0.6, friction: 0.4,
+      });
+      const leftWall = Bodies.rectangle(-wallThick / 2, cH / 2, wallThick, cH * 3, {
+        isStatic: true, restitution: 0.7,
+      });
+      const rightWall = Bodies.rectangle(cW + wallThick / 2, cH / 2, wallThick, cH * 3, {
+        isStatic: true, restitution: 0.7,
+      });
+      Composite.add(engine.world, [ground, leftWall, rightWall]);
+
+      // ─── Scale — EXACT Vercel values ───
       const isMobile = cW < 600;
       const scale = isMobile ? 0.7 : 0.85;
       const cardW = CARD_W * scale;
       const cardH = CARD_H * scale;
 
-      // ─── Matter.js Engine ───
-      const engine = Matter.Engine.create({
-        gravity: { x: 0, y: 1.2, scale: 0.001 },
-      });
+      // ─── Card bodies + DOM ───
+      interface CardEntry { el: HTMLElement; body: Matter.Body }
+      const cards: CardEntry[] = [];
 
-      // ─── Floor + Walls (thick to prevent tunneling) ───
-      const wallThick = 200;
-      const floor = Matter.Bodies.rectangle(cW / 2, cH + wallThick / 2, cW * 3, wallThick, { isStatic: true, restitution: 0.4, friction: 0.8 });
-      const ceiling = Matter.Bodies.rectangle(cW / 2, -wallThick / 2, cW * 3, wallThick, { isStatic: true, restitution: 0.3 });
-      const leftWall = Matter.Bodies.rectangle(-wallThick / 2, cH / 2, wallThick, cH * 3, { isStatic: true, restitution: 0.5 });
-      const rightWall = Matter.Bodies.rectangle(cW + wallThick / 2, cH / 2, wallThick, cH * 3, { isStatic: true, restitution: 0.5 });
-      Matter.Composite.add(engine.world, [floor, ceiling, leftWall, rightWall]);
+      for (let i = 0; i < CARDS.length; i++) {
+        const card = CARDS[i];
 
-      // ─── Safe bounds for cards ───
-      const minX = cardW / 2 + 2;
-      const maxX = cW - cardW / 2 - 2;
-      const minY = cardH / 2 + 2;
-      const maxY = cH - cardH / 2 - 2;
-      const MAX_SPEED = 15; // cap velocity to prevent tunneling
+        // Cards start just above the section — short drop, land near heading
+        const x = (cW / (CARDS.length + 1)) * (i + 1);
+        const y = -cardH - (i * 10);
 
-      // ─── Create physics bodies + DOM cards ───
-      const bodies: Matter.Body[] = [];
-      const domCards: HTMLElement[] = [];
-
-      CARDS.forEach((card, i) => {
-        const spacing = cW / (CARDS.length + 1);
-        const x = spacing * (i + 1);
-        const y = -cardH - (i * 40); // start above the container — fall from the top
-
-        const body = Matter.Bodies.rectangle(x, y, cardW, cardH, {
-          restitution: 0.4,
-          friction: 0.3,
-          frictionAir: 0.03,
+        // EXACT Vercel body properties
+        const body = Bodies.rectangle(x, y, cardW, cardH, {
+          restitution: 0.5,
+          friction: 0.1,
+          frictionAir: 0.06,  // heavy air drag = slow dreamy motion when thrown
           density: 0.002,
           angle: (Math.random() - 0.5) * 0.3,
           chamfer: { radius: 12 },
         });
-        Matter.Composite.add(engine.world, body);
-        bodies.push(body);
+        Composite.add(engine.world, body);
 
-        // Create DOM card with icon + brand color
         const el = document.createElement('a');
         el.href = card.href;
         if (!card.href.startsWith('mailto:')) {
@@ -108,159 +109,166 @@ export function PhysicsCards() {
           el.rel = 'noopener noreferrer';
         }
         el.className = 'physics-card';
-        el.style.width = cardW + 'px';
-        el.style.height = cardH + 'px';
+        el.style.cssText = `
+          width:${cardW}px; height:${cardH}px;
+          background:${card.bg}; border-radius:1rem; padding:0;
+          touch-action:none; cursor:grab;
+        `;
         el.style.setProperty('--card-color', card.color);
-        el.style.background = card.bg;
-        el.style.borderRadius = '1rem';
-        el.style.padding = '0';
         el.draggable = false;
         el.innerHTML = `
-          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;gap:8px;">
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;gap:8px;pointer-events:none;">
             <div style="opacity:0.95;">${card.icon}</div>
             <span style="font-family:var(--font-sans);font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:white;opacity:0.9;">${card.name}</span>
           </div>
         `;
-        container.appendChild(el);
-        domCards.push(el);
-      });
+        scene.appendChild(el);
+        cards.push({ el, body });
+      }
 
-      // ─── Mouse/Touch Constraint (proper physics-based drag) ───
-      const mouse = Matter.Mouse.create(container);
-      // Fix pixel ratio for retina screens
-      mouse.pixelRatio = window.devicePixelRatio || 1;
+      // ─── Drag state ───
+      let dragCard: CardEntry | null = null;
+      let isDragging = false;
+      let prevPos = { x: 0, y: 0 };
+      let dragVel = { x: 0, y: 0 };
 
-      const mouseConstraint = Matter.MouseConstraint.create(engine, {
-        mouse: mouse,
-        constraint: {
-          stiffness: 0.6,
-          damping: 0.1,
-          render: { visible: false },
-        } as Matter.IConstraintDefinition,
-      });
-      Matter.Composite.add(engine.world, mouseConstraint);
+      function getPos(e: MouseEvent | Touch) {
+        const r = scene!.getBoundingClientRect();
+        return { x: e.clientX - r.left, y: e.clientY - r.top };
+      }
 
-      // Prevent page scrolling when dragging cards
-      let dragging = false;
-      Matter.Events.on(mouseConstraint, 'startdrag', () => { dragging = true; });
-      Matter.Events.on(mouseConstraint, 'enddrag', () => {
-        setTimeout(() => { dragging = false; }, 100);
-      });
+      function hitTest(px: number, py: number) {
+        for (let i = cards.length - 1; i >= 0; i--) {
+          if (Bounds.contains(cards[i].body.bounds, { x: px, y: py })) return cards[i];
+        }
+        return null;
+      }
+
+      const onMouseDown = (e: MouseEvent) => {
+        const p = getPos(e);
+        const hit = hitTest(p.x, p.y);
+        if (hit) {
+          dragCard = hit;
+          isDragging = true;
+          prevPos = p;
+          dragVel = { x: 0, y: 0 };
+          Body.setStatic(hit.body, true);
+          e.preventDefault();
+        }
+      };
+      const onMouseMove = (e: MouseEvent) => {
+        if (!dragCard) return;
+        const p = getPos(e);
+        dragVel = { x: p.x - prevPos.x, y: p.y - prevPos.y };
+        prevPos = p;
+        Body.setPosition(dragCard.body, p);
+        Body.setVelocity(dragCard.body, { x: 0, y: 0 });
+      };
+      const onMouseUp = () => {
+        if (!dragCard) return;
+        Body.setStatic(dragCard.body, false);
+        // Slow-motion throw: 30% of real pointer velocity
+        Body.setVelocity(dragCard.body, {
+          x: dragVel.x * 0.3,
+          y: dragVel.y * 0.3,
+        });
+        dragCard = null;
+        setTimeout(() => { isDragging = false; }, 80);
+      };
+
+      const onTouchStart = (e: TouchEvent) => {
+        const p = getPos(e.touches[0]);
+        const hit = hitTest(p.x, p.y);
+        if (hit) {
+          dragCard = hit;
+          isDragging = true;
+          prevPos = p;
+          dragVel = { x: 0, y: 0 };
+          Body.setStatic(hit.body, true);
+        }
+      };
+      const onTouchMove = (e: TouchEvent) => {
+        if (!dragCard) return;
+        e.preventDefault();
+        const p = getPos(e.touches[0]);
+        dragVel = { x: p.x - prevPos.x, y: p.y - prevPos.y };
+        prevPos = p;
+        Body.setPosition(dragCard.body, p);
+        Body.setVelocity(dragCard.body, { x: 0, y: 0 });
+      };
+      const onTouchEnd = () => {
+        if (!dragCard) return;
+        Body.setStatic(dragCard.body, false);
+        // Slow-motion throw: 30% of real pointer velocity
+        Body.setVelocity(dragCard.body, {
+          x: dragVel.x * 0.3,
+          y: dragVel.y * 0.3,
+        });
+        dragCard = null;
+        setTimeout(() => { isDragging = false; }, 100);
+      };
 
       // Block link clicks while dragging
-      container.addEventListener('click', (e) => {
-        if (dragging) { e.preventDefault(); e.stopPropagation(); }
-      }, true);
-
-      // Prevent page scroll during touch-drag on cards
-      const preventScroll = (e: TouchEvent) => {
-        if (mouseConstraint.body) { e.preventDefault(); }
+      const onClick = (e: MouseEvent) => {
+        if (isDragging) { e.preventDefault(); e.stopPropagation(); }
       };
-      container.addEventListener('touchmove', preventScroll, { passive: false });
 
-      // ─── Every tick: clamp positions + velocities, anti-gravity + pull to center ───
-      Matter.Events.on(engine, 'beforeUpdate', () => {
-        const cxCenter = cW / 2;
-        
-        bodies.forEach((b) => {
-          // Hard-clamp velocity
-          const speed = Math.sqrt(b.velocity.x ** 2 + b.velocity.y ** 2);
-          if (speed > MAX_SPEED) {
-            const factor = MAX_SPEED / speed;
-            Matter.Body.setVelocity(b, {
-              x: b.velocity.x * factor,
-              y: b.velocity.y * factor,
-            });
-          }
+      scene.addEventListener('mousedown', onMouseDown);
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('mouseup', onMouseUp);
+      scene.addEventListener('touchstart', onTouchStart, { passive: true });
+      scene.addEventListener('touchmove', onTouchMove, { passive: false });
+      scene.addEventListener('touchend', onTouchEnd);
+      scene.addEventListener('click', onClick, true);
 
-          // Strict boundary clamping -- prevent tunneling
-          let cx = b.position.x;
-          let cy = b.position.y;
-          let clamped = false;
-          if (cx < minX) { cx = minX; clamped = true; }
-          if (cx > maxX) { cx = maxX; clamped = true; }
-          if (cy < minY) { cy = minY; clamped = true; }
-          if (cy > maxY) { cy = maxY; clamped = true; }
-          if (clamped) {
-            Matter.Body.setVelocity(b, {
-              x: b.position.x !== cx ? -b.velocity.x * 0.8 : b.velocity.x, // Corrected logic: reverse if position was changed
-              y: b.position.y !== cy ? -b.velocity.y * 0.8 : b.velocity.y,
-            });
-            Matter.Body.setPosition(b, { x: cx, y: cy });
-          }
-
-          // Apply physics forces only if this card is NOT currently being dragged
-          if (mouseConstraint.body !== b) {
-            // Anti-gravity: keep cards from sinking to the floor
-            if (b.position.y > cH * 0.6) {
-              const upwardForce = (b.position.y - cH * 0.6) * 0.000008;
-              Matter.Body.applyForce(b, b.position, { x: 0, y: -upwardForce * b.mass });
-            }
-
-            // Strong push-back from the edges
-            if (b.position.x < minX + 20) {
-              Matter.Body.applyForce(b, b.position, { x: 0.005 * b.mass, y: 0 });
-            } else if (b.position.x > maxX - 20) {
-              Matter.Body.applyForce(b, b.position, { x: -0.005 * b.mass, y: 0 });
-            }
-
-            // Always pull slightly horizontally towards the center (spring back)
-            const dx = cxCenter - b.position.x;
-            Matter.Body.applyForce(b, b.position, { x: dx * 0.000003 * b.mass, y: 0 });
-          }
-        });
-      });
-
-      // ─── Start engine ───
-      const runner = Matter.Runner.create();
-      Matter.Runner.run(runner, engine);
-
+      // ─── Engine loop — EXACT Vercel: buoyancy force if card sinks too low ───
       let raf = 0;
-      const render = () => {
-        for (let i = 0; i < bodies.length; i++) {
-          const b = bodies[i];
-          const el = domCards[i];
-          const px = b.position.x - cardW / 2;
-          const py = b.position.y - cardH / 2;
-          const deg = b.angle * (180 / Math.PI);
-          el.style.transform = `translate3d(${px}px, ${py}px, 0) rotate(${deg}deg)`;
-        }
-        raf = requestAnimationFrame(render);
-      };
-      raf = requestAnimationFrame(render);
+      function update() {
+        Engine.update(engine, 1000 / 60);
 
+        for (const c of cards) {
+          // Buoyancy: keep any settled card from sinking below 80%
+          if (c.body.position.y > cH * 0.8 && c.body !== dragCard?.body) {
+            Body.applyForce(c.body, c.body.position, {
+              x: 0,
+              y: -0.0005 * c.body.mass,
+            });
+          }
+
+          const px = c.body.position.x - cardW / 2;
+          const py = c.body.position.y - cardH / 2;
+          const deg = c.body.angle * (180 / Math.PI);
+          c.el.style.transform = `translate3d(${px}px, ${py}px, 0) rotate(${deg}deg)`;
+        }
+        raf = requestAnimationFrame(update);
+      }
+      raf = requestAnimationFrame(update);
+
+      // ─── Cleanup ───
       return () => {
         cancelAnimationFrame(raf);
-        Matter.Runner.stop(runner);
-        Matter.Composite.clear(engine.world, false);
-        Matter.Engine.clear(engine);
-        container.removeEventListener('touchmove', preventScroll);
-        domCards.forEach((el) => el.remove());
+        Composite.clear(engine.world, false);
+        Engine.clear(engine);
+        scene.removeEventListener('mousedown', onMouseDown);
+        window.removeEventListener('mousemove', onMouseMove);
+        window.removeEventListener('mouseup', onMouseUp);
+        scene.removeEventListener('touchstart', onTouchStart);
+        scene.removeEventListener('touchmove', onTouchMove);
+        scene.removeEventListener('touchend', onTouchEnd);
+        scene.removeEventListener('click', onClick, true);
+        cards.forEach(c => c.el.remove());
       };
     });
   }, [isInView, initialized]);
 
   return (
-    <div ref={sectionRef} className="physics-section-wrapper" style={{ position: 'relative', width: '100%', height: '300px' }}>
-      {/* Heading — clean, no subtitle */}
-      <div style={{
-        position: 'absolute',
-        top: '0.75rem',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        zIndex: 5,
-        textAlign: 'center',
-        pointerEvents: 'none',
-        maxWidth: '380px',
-        width: '100%',
-        padding: '0 1rem',
-      }}>
+    <div ref={sectionRef} className="physics-cards-section">
+      <div className="physics-cards-center">
         <motion.span
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0 }}
-          className="font-sans text-[10px] uppercase tracking-[0.3em] text-brass"
-          style={{ display: 'block' }}
+          transition={{ duration: 0.5 }}
+          className="font-sans text-[10px] uppercase tracking-[0.3em] text-brass block"
         >
           Connect with Us
         </motion.span>
@@ -268,26 +276,13 @@ export function PhysicsCards() {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="font-serif text-3xl sm:text-4xl md:text-5xl text-parchment"
-          style={{ marginTop: '0.5rem' }}
+          className="font-serif text-3xl sm:text-4xl md:text-5xl text-parchment mt-3"
         >
           Contact Us
         </motion.h2>
       </div>
 
-      {/* Physics container */}
-      <div
-        ref={containerRef}
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          overflow: 'hidden',
-          zIndex: 1,
-        }}
-      />
+      <div ref={containerRef} className="physics-container" />
     </div>
   );
 }

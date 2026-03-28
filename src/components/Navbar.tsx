@@ -27,6 +27,7 @@ export function Navbar() {
     { name: 'Publications', href: '#publications' },
     { name: 'Visit', href: '#visit' },
     { name: 'Events', href: '#events' },
+    { name: 'Contact', href: '#contact' },
   ];
 
   // Close menu first, then scroll to section after overflow is restored

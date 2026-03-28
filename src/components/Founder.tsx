@@ -76,7 +76,7 @@ export function Founder() {
               <div className="mt-10 border-l border-brass/30 pl-6 space-y-6">
                 {[
                   { year: '1921', note: 'Born in Munnar, Kerala' },
-                  { year: '1954', note: 'Participated in William Branham\'s healing revivals across India' },
+                  { year: '1954', note: "Participated in William Branham's healing revivals across India" },
                   { year: '1963', note: 'Founded Manujothi Ashram, Tirunelveli' },
                   { year: '1969', note: 'Displayed Vishwaroopam in Chicago, July 20–21 — the same day as the Apollo 11 moon landing' },
                 ].map((t, i) => (

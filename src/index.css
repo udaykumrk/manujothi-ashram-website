@@ -44,7 +44,7 @@ h6 {
 }
 
 /* ─── Scroll offset for fixed nav ──────── */
-section[id] {
+section[id], footer[id] {
   scroll-margin-top: 5rem;
 }
 
@@ -194,11 +194,9 @@ section[id] {
   inset: 0;
   top: 0;
   z-index: 40;
-  background: linear-gradient(
-    180deg,
-    rgba(26, 28, 32, 0.98) 0%,
-    rgba(26, 28, 32, 0.95) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(26, 28, 32, 0.98) 0%,
+      rgba(26, 28, 32, 0.95) 100%);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   display: flex;
@@ -438,4 +436,165 @@ section[id] {
 
 .flip-card-back {
   transform: rotateY(180deg);
+}
+
+
+/* ─── Hero Marquee Scroll Strip ─── */
+@keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-33.333%); }
+}
+.marquee-track {
+    animation: marquee 40s linear infinite;
+    will-change: transform;
+}
+
+/* ─── Physics Cards & Contact Section ─── */
+.physics-cards-section {
+    justify-content: center;
+    align-items: center;
+    min-height: 240px;
+    display: flex;
+    position: relative;
+    overflow: hidden;
+    padding: 0 1rem;
+}
+
+.physics-cards-center {
+    text-align: center;
+    z-index: 2;
+    pointer-events: none;
+    max-width: 380px;
+    padding: 0.75rem 0;
+    position: relative;
+}
+
+.physics-container {
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+}
+
+.physics-card {
+    cursor: grab;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: none;
+    z-index: 10;
+    will-change: transform;
+    background: #fff;
+    border-radius: .75rem;
+    padding: 6px;
+    text-decoration: none;
+    transition: box-shadow .4s, border-color .3s;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    box-shadow: 0 20px 50px #00000059, 0 8px 20px #00000026, inset 0 0 0 1px #fff3;
+}
+
+.physics-card:active {
+    cursor: grabbing;
+}
+
+.physics-card:hover {
+    box-shadow: 0 30px 70px #00000080, 0 10px 30px #00000040, 0 0 50px var(--card-color, #b89768);
+}
+
+@supports (color:color-mix(in lab, red, red)) {
+    .physics-card:hover {
+        box-shadow: 0 30px 70px #00000080, 0 10px 30px #00000040, 0 0 50px color-mix(in srgb, var(--card-color, #b89768) 12%, transparent);
+    }
+}
+
+.physics-card-img {
+    border-radius: .4rem;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.physics-card-img img {
+    object-fit: cover;
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+    transition: transform .5s cubic-bezier(.22, 1, .36, 1);
+    display: block;
+}
+
+.physics-card:hover .physics-card-img img {
+    transform: scale(1.06);
+}
+
+.physics-card-gradient {
+    background: linear-gradient(#1a1c2000 55%, #1a1c20b3);
+    border-radius: .4rem;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.physics-card-label {
+    z-index: 2;
+    opacity: 0;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 12px;
+    transition: all .4s cubic-bezier(.22, 1, .36, 1);
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transform: translateY(6px);
+}
+
+.physics-card:hover .physics-card-label {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.physics-card-dot {
+    border-radius: 50%;
+    flex-shrink: 0;
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+}
+
+.physics-card-name {
+    font-family: var(--font-sans);
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: #fff;
+    text-shadow: 0 1px 4px #00000080;
+    font-size: .6rem;
+    font-weight: 700;
+}
+
+@media(min-width:768px) {
+    .physics-cards-section {
+        min-height: 300px;
+        padding: 0 2rem;
+    }
+    .physics-card {
+        border-radius: 1rem;
+        padding: 8px;
+    }
+    .physics-card-img, .physics-card-gradient {
+        border-radius: .5rem;
+    }
+    .physics-card-name {
+        font-size: .65rem;
+    }
 }
