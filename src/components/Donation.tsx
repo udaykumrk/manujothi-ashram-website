@@ -13,14 +13,6 @@ export function Donation() {
     <section id="support" className="relative overflow-hidden text-white"
       style={{ background: 'linear-gradient(135deg, #0f0c07 0%, #1a1408 50%, #0d0b06 100%)' }}>
 
-      {/* Big decorative gold letter */}
-      <div className="absolute right-0 top-0 bottom-0 flex items-center pointer-events-none select-none overflow-hidden"
-        aria-hidden="true">
-        <span className="font-serif font-bold leading-none"
-          style={{ fontSize: 'clamp(14rem, 30vw, 28rem)', color: 'rgba(212,168,83,0.04)', lineHeight: 1 }}>
-          ✦
-        </span>
-      </div>
 
       {/* Gold top border line */}
       <div className="h-px w-full" style={{ background: 'linear-gradient(to right, transparent, #D4A853, transparent)' }} />
