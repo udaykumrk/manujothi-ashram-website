@@ -8,12 +8,12 @@ export function Hero() {
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '10%']);
 
   return (
-    <section ref={ref} className="relative h-screen min-h-[600px] flex items-end justify-start overflow-hidden bg-black">
+    <section ref={ref} className="relative h-screen min-h-[600px] flex flex-col overflow-hidden bg-black">
 
       {/* ── Video with subtle parallax ── */}
       <motion.div style={{ y }} className="absolute inset-0 z-0 scale-110">
         <video autoPlay muted loop playsInline className="w-full h-full object-cover">
-          <source src="/landing_page.mp4" type="video/mp4" />
+          <source src="/landing_page_hd.mp4" type="video/mp4" />
         </video>
       </motion.div>
 
@@ -26,32 +26,8 @@ export function Hero() {
         style={{ background: 'linear-gradient(to right, rgba(0,0,0,0.45) 0%, transparent 60%)' }} />
 
       {/* ── All text — bottom-left editorial ── */}
-      <motion.div style={{ opacity }} className="relative z-10 w-full px-8 sm:px-14 lg:px-20 pb-24 sm:pb-28 max-w-5xl">
+      <motion.div style={{ opacity }} className="relative z-10 w-full px-8 sm:px-14 lg:px-20 mt-auto pb-24 sm:pb-28 max-w-5xl">
 
-        {/* Eyebrow */}
-        <motion.div
-          className="flex items-center gap-3 mb-6"
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.2 }}
-        >
-          <div className="h-px w-8 bg-[#D4A853]/70" />
-          <span className="font-sans text-[9px] uppercase tracking-[0.45em] text-[#D4A853]/80">
-            Tirunelveli · Tamil Nadu · Est. 1963
-          </span>
-        </motion.div>
-
-        {/* Subtitle */}
-        <div className="overflow-hidden mb-3">
-          <motion.p
-            className="font-sans text-[11px] sm:text-xs uppercase tracking-[0.5em] text-white/50"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-          >
-            Light to Mankind
-          </motion.p>
-        </div>
 
         {/* Title line 1 */}
         <div className="overflow-hidden">
@@ -60,7 +36,7 @@ export function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
             className="font-serif font-light leading-[0.95] tracking-tight"
-            style={{ fontSize: 'clamp(3.5rem, 11vw, 9rem)', color: '#fff', textShadow: '0 4px 60px rgba(0,0,0,0.6)' }}
+            style={{ fontSize: 'clamp(2.8rem, 8vw, 6.5rem)', color: '#fff', textShadow: '0 4px 60px rgba(0,0,0,0.6)' }}
           >
             Manujothi
           </motion.h1>
@@ -74,7 +50,7 @@ export function Hero() {
             transition={{ duration: 1, delay: 0.52, ease: [0.22, 1, 0.36, 1] }}
             className="font-serif font-light leading-[0.95] tracking-tight"
             style={{
-              fontSize: 'clamp(3.5rem, 11vw, 9rem)',
+              fontSize: 'clamp(2.8rem, 8vw, 6.5rem)',
               color: '#D4A853',
               textShadow: '0 4px 60px rgba(180,120,20,0.5)',
             }}
@@ -88,8 +64,19 @@ export function Hero() {
           initial={{ opacity: 0, scaleX: 0 }}
           animate={{ opacity: 1, scaleX: 1 }}
           transition={{ duration: 0.8, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          style={{ originX: 0, height: '1px', maxWidth: '80px', background: 'linear-gradient(to right, #D4A853, transparent)', marginBottom: '1.5rem' }}
+          style={{ originX: 0, height: '1px', maxWidth: '80px', background: 'linear-gradient(to right, #D4A853, transparent)', marginBottom: '1rem' }}
         />
+
+        {/* Tagline — Light to Mankind */}
+        <motion.p
+          className="font-sans text-[11px] sm:text-xs uppercase tracking-[0.5em] text-[#D4A853]/90 mb-6"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.8 }}
+          style={{ textShadow: '0 2px 20px rgba(0,0,0,0.8)' }}
+        >
+          Light to Mankind
+        </motion.p>
 
         {/* Scripture quote */}
         <motion.blockquote

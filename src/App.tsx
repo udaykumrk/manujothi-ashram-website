@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import { Navbar } from './components/Navbar';
-import { Ticker } from './components/Ticker';
 import { Hero } from './components/Hero';
 import { Mission } from './components/Mission';
 import { Founder } from './components/Founder';
@@ -39,7 +38,6 @@ export default function App() {
         <Mission />
         <Founder />
         <Teachings />
-        <Ticker />
         <Events />
         <Donation />
       </main>

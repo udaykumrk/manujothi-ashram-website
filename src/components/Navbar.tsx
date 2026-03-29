@@ -54,7 +54,7 @@ export function Navbar() {
           : 'bg-transparent py-0'
           }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
+        <div className="w-full px-8 sm:px-14 lg:px-20">
           <div
             className={`flex justify-between items-center transition-all duration-500 ${scrolled ? 'h-16' : 'h-20'
               }`}

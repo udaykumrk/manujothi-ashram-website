@@ -4,7 +4,7 @@ import { TextReveal } from './TextReveal';
 import { motion } from 'motion/react';
 import scriptureImg from '../assets/teaching_scripture.png';
 import prophecyImg from '../assets/teaching_prophecy.png';
-import meditationImg from '../assets/teaching_meditation.png';
+import meditationImg from '../assets/teaching_krishna_arjuna.png';
 import coverAmrutha from '../assets/book_amrutha_manjari.png';
 import coverAnkuram from '../assets/book_ankuram.png';
 import coverLiberation from '../assets/book_secret_liberation.png';
@@ -15,7 +15,7 @@ import coverSermons from '../assets/book_sermons.png';
 const teachings = [
   {
     category: 'Comparative Scripture',
-    scriptureRef: 'John 1:1',
+    scriptureRef: '',
     title: 'The Comparative Study',
     description:
       'A living inquiry into the parallels between the Holy Bible, Bhagavad Gita, Holy Quran, and the Vedas — revealing the single divine voice behind all scripture.',
@@ -33,7 +33,7 @@ const teachings = [
   },
   {
     category: 'Spiritual Discipline',
-    scriptureRef: 'John 12:34',
+    scriptureRef: '',
     title: 'The Immortal Yoga',
     description:
       'Practical spiritual disciplines for aligning the soul with the eternal. Drawn from the Vedas, the Sermon on the Mount, and the lived experience of the Ashram community.',
@@ -302,7 +302,7 @@ export function Teachings() {
               <p className="font-sans text-xs text-parchment/50">
                 All Ashram publications are distributed free of charge to genuine seekers.
               </p>
-                <div className="flex flex-col sm:flex-row flex-wrap gap-3 flex-shrink-0 w-full sm:w-auto">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-3 flex-shrink-0 w-full sm:w-auto">
                 <a
                   href="mailto:ashram@manjothi.com?subject=Request%20Free%20Publications"
                   className="btn-arrow inline-flex items-center gap-2 bg-brass text-charcoal px-5 py-2.5 text-[9px] font-bold uppercase tracking-widest hover:bg-parchment transition-colors duration-300 rounded-full w-full sm:w-auto"
