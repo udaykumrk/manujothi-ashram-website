@@ -5,11 +5,13 @@
   --font-serif: "Cormorant", ui-serif, Georgia, serif;
   --font-quote: "Newsreader", ui-serif, Georgia, serif;
 
-  --color-parchment: #F9F8F6;
-  --color-charcoal: #1A1C20;
-  --color-brass: #B89768;
-  --color-stone: #E5E0D8;
-  --color-sepia: #8B6E4E;
+  /* ── Soft Peach Neutral Palette (from Dribbble) ── */
+  --color-parchment: #FCFAF8;   /* off-white — lightest bg */
+  --color-stone:     #F3E4DD;   /* soft peach — card/secondary bg */
+  --color-blush:     #E6C3B5;   /* warm peach — mid-tone accent bg */
+  --color-charcoal:  #4A3832;   /* dark warm brown — dark sections & text */
+  --color-brass:     #C4884A;   /* warmer gold to match the peach palette */
+  --color-sepia:     #7A5C48;   /* mid warm brown — subtext */
 }
 
 /* ─── Base ─────────────────────────────── */
@@ -195,8 +197,8 @@ section[id], footer[id] {
   top: 0;
   z-index: 40;
   background: linear-gradient(180deg,
-      rgba(26, 28, 32, 0.98) 0%,
-      rgba(26, 28, 32, 0.95) 100%);
+      rgba(74, 56, 50, 0.98) 0%,
+      rgba(74, 56, 50, 0.97) 100%);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   display: flex;
@@ -535,7 +537,7 @@ section[id], footer[id] {
 }
 
 .physics-card-gradient {
-    background: linear-gradient(#1a1c2000 55%, #1a1c20b3);
+    background: linear-gradient(#4a383200 55%, #4a3832b3);
     border-radius: .4rem;
     position: absolute;
     top: 0;
@@ -598,3 +600,220 @@ section[id], footer[id] {
         font-size: .65rem;
     }
 }
+
+/* ═══════════════════════════════════════════════
+   Event Popup — Final (Nykaa-style)
+   ═══════════════════════════════════════════════ */
+
+/* ── Overlay: light so website is visible ── */
+.ep-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  animation: ep-in 0.4s ease forwards;
+}
+
+.ep-overlay.ep-exit {
+  animation: ep-out 0.45s ease forwards;
+}
+
+@keyframes ep-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes ep-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* ── Card: bottom sheet on mobile, center on desktop ── */
+.ep-card {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  background: #fff;
+  border-radius: 1.1rem 1.1rem 0 0;
+  overflow: hidden;
+  box-shadow:
+    0 -4px 30px rgba(0, 0, 0, 0.2),
+    0 -1px 8px rgba(0, 0, 0, 0.1);
+  animation: ep-slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.ep-card.ep-exit {
+  animation: ep-slide-down 0.4s cubic-bezier(0.55, 0, 1, 0.45) forwards;
+}
+
+@keyframes ep-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ep-slide-down {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+
+/* ── Close button ── */
+.ep-close {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  z-index: 10;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.2s ease;
+}
+
+.ep-close:hover {
+  transform: scale(1.15);
+}
+
+.ep-close:active {
+  transform: scale(0.9);
+}
+
+/* ── Poster ── */
+.ep-poster {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ═══ Desktop: centered floating card ═══ */
+@media (min-width: 641px) {
+  .ep-overlay {
+    align-items: center;
+  }
+
+  .ep-card {
+    max-width: 420px;
+    border-radius: 1rem;
+    box-shadow:
+      0 30px 70px rgba(0, 0, 0, 0.35),
+      0 10px 25px rgba(0, 0, 0, 0.2);
+    animation-name: ep-scale-in;
+  }
+
+  .ep-card.ep-exit {
+    animation-name: ep-scale-out;
+  }
+
+  @keyframes ep-scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.88) translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  @keyframes ep-scale-out {
+    from {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.9) translateY(20px);
+    }
+  }
+}
+
+/* ═══ Mobile: full-width bottom sheet ═══ */
+@media (max-width: 640px) {
+  .ep-close svg {
+    width: 26px;
+    height: 26px;
+  }
+}
+
+/* ─── Photo Gallery Marquee Strip ─────────────────────────────── */
+@keyframes photo-marquee-left {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes photo-marquee-right {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+.photo-strip-track-left {
+  display: flex;
+  width: max-content;
+  animation: photo-marquee-left 35s linear infinite;
+  will-change: transform;
+}
+
+.photo-strip-track-right {
+  display: flex;
+  width: max-content;
+  animation: photo-marquee-right 42s linear infinite;
+  will-change: transform;
+}
+
+.photo-strip-track-left-slow {
+  display: flex;
+  width: max-content;
+  animation: photo-marquee-left 55s linear infinite;
+  will-change: transform;
+}
+
+.photo-strip-row:hover .photo-strip-track-left,
+.photo-strip-row:hover .photo-strip-track-right,
+.photo-strip-row:hover .photo-strip-track-left-slow {
+  animation-play-state: paused;
+}
+
+/* ─── Gallery 3-Column Vertical Scroll ─────────────────────────── */
+@keyframes gallery-scroll-down {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-50%); }
+}
+
+.gallery-col-track {
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+  animation: gallery-scroll-down 28s linear infinite;
+}
+
+@keyframes gallery-scroll-up {
+  from { transform: translateY(-50%); }
+  to   { transform: translateY(0); }
+}
+
+.gallery-col-track-up {
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+  animation: gallery-scroll-up 32s linear infinite;
+}

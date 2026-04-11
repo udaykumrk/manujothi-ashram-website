@@ -5,17 +5,25 @@ export function Hero() {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
   const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '10%']);
 
   return (
     <section ref={ref} className="relative h-screen min-h-[600px] flex flex-col overflow-hidden bg-black">
 
-      {/* ── Video with subtle parallax ── */}
-      <motion.div style={{ y }} className="absolute inset-0 z-0 scale-110">
-        <video autoPlay muted loop playsInline className="w-full h-full object-cover">
+      {/* ── Video Background — slowed to 0.5x playback speed ── */}
+      <div className="absolute inset-0 z-0">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-full object-cover"
+          onLoadedMetadata={(e) => {
+            (e.target as HTMLVideoElement).playbackRate = 0.5;
+          }}
+        >
           <source src="/landing_page_hd.mp4" type="video/mp4" />
         </video>
-      </motion.div>
+      </div>
 
       {/* ── Multi-layer overlay ── */}
       <div className="absolute top-0 left-0 right-0 h-40 z-[1]"
@@ -27,7 +35,6 @@ export function Hero() {
 
       {/* ── All text — bottom-left editorial ── */}
       <motion.div style={{ opacity }} className="relative z-10 w-full px-8 sm:px-14 lg:px-20 mt-auto pb-24 sm:pb-28 max-w-5xl">
-
 
         {/* Title line 1 */}
         <div className="overflow-hidden">
@@ -49,11 +56,7 @@ export function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.52, ease: [0.22, 1, 0.36, 1] }}
             className="font-serif font-light leading-[0.95] tracking-tight"
-            style={{
-              fontSize: 'clamp(2.8rem, 8vw, 6.5rem)',
-              color: '#D4A853',
-              textShadow: '0 4px 60px rgba(180,120,20,0.5)',
-            }}
+            style={{ fontSize: 'clamp(2.8rem, 8vw, 6.5rem)', color: '#C4884A', textShadow: '0 4px 60px rgba(160,100,20,0.5)' }}
           >
             Ashram
           </motion.h1>
@@ -64,12 +67,12 @@ export function Hero() {
           initial={{ opacity: 0, scaleX: 0 }}
           animate={{ opacity: 1, scaleX: 1 }}
           transition={{ duration: 0.8, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          style={{ originX: 0, height: '1px', maxWidth: '80px', background: 'linear-gradient(to right, #D4A853, transparent)', marginBottom: '1rem' }}
+          style={{ originX: 0, height: '1px', maxWidth: '80px', background: 'linear-gradient(to right, #C4884A, transparent)', marginBottom: '1rem' }}
         />
 
         {/* Tagline — Light to Mankind */}
         <motion.p
-          className="font-sans text-[11px] sm:text-xs uppercase tracking-[0.5em] text-[#D4A853]/90 mb-6"
+          className="font-sans text-[11px] sm:text-xs uppercase tracking-[0.5em] text-[#C4884A]/90 mb-6"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
@@ -88,8 +91,8 @@ export function Hero() {
           <p className="font-serif italic text-sm sm:text-base text-white/65 leading-loose mb-2">
             "As the lightning cometh out of the East, and shineth even unto the West; so shall also the coming of the Son of Man be."
           </p>
-          <cite className="font-sans text-[9px] uppercase tracking-[0.35em] text-[#D4A853]/70 not-italic flex items-center gap-3">
-            <span className="h-px w-5 inline-block bg-[#D4A853]/40" />
+          <cite className="font-sans text-[9px] uppercase tracking-[0.35em] text-[#C4884A]/70 not-italic flex items-center gap-3">
+            <span className="h-px w-5 inline-block bg-[#C4884A]/40" />
             Matthew 24:27
           </cite>
         </motion.blockquote>
@@ -103,7 +106,7 @@ export function Hero() {
         >
           <a href="#teachings"
             className="group inline-flex items-center gap-3 px-7 py-3.5 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.25em] rounded-full transition-all duration-300"
-            style={{ background: 'linear-gradient(135deg, #D4A853, #B8893A)', color: '#000' }}
+            style={{ background: 'linear-gradient(135deg, #C4884A, #A06830)', color: '#fff' }}
           >
             Explore Teachings
             <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
@@ -128,7 +131,7 @@ export function Hero() {
             animate={{ scaleY: [0, 1, 0] }}
             transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
             className="w-px h-12"
-            style={{ background: 'linear-gradient(to bottom, #D4A853aa, transparent)', transformOrigin: 'top' }}
+            style={{ background: 'linear-gradient(to bottom, #C4884Aaa, transparent)', transformOrigin: 'top' }}
           />
         </motion.div>
       </motion.div>
@@ -139,7 +142,7 @@ export function Hero() {
         <div className="marquee-track flex whitespace-nowrap">
           {[0, 1, 2].map((idx) => (
             <span key={idx} className="font-sans text-[9px] uppercase tracking-[0.32em] px-12 shrink-0"
-              style={{ color: 'rgba(212,168,83,0.55)' }}>
+              style={{ color: 'rgba(196,136,74,0.65)' }}>
               OUR LORD GOD ALONE IS HOLY! HOLY! HOLY! — HE LIVETH FOREVER — HE HAS REDEEMED US BY THE LOVE OF HIS SUPREME SACRIFICE — PRAISE HIM, FOR HE IS GOOD AND HIS MERCY ENDURETH FOREVER — BLESSED IS HE THAT COMETH IN THE NAME OF THE LORD — MATTHEW 24:27 &nbsp;&nbsp;✦&nbsp;&nbsp;
             </span>
           ))}

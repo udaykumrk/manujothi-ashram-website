@@ -52,7 +52,7 @@ export function Events() {
   const currentStage = stages[activeStage];
 
   return (
-    <section id="events" className="py-16 sm:py-24 md:py-32 bg-stone/20">
+    <section id="events" className="py-16 sm:py-24 md:py-32 bg-charcoal">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
 
         {/* Section header */}
@@ -65,7 +65,7 @@ export function Events() {
         <TextReveal
           text="Gather in Fellowship"
           as="h2"
-          className="font-serif text-4xl md:text-5xl text-charcoal text-center mb-16"
+          className="font-serif text-4xl md:text-5xl text-parchment text-center mb-16"
           delay={0.05}
           stagger={0.07}
         />
@@ -82,10 +82,18 @@ export function Events() {
                     Annual · Feb 18–25
                   </span>
                 </div>
-                <h3 className="font-serif text-2xl text-charcoal mb-3">Glorification Day</h3>
-                <p className="font-sans text-sm text-charcoal/65 leading-relaxed">
-                  Held every year from <strong className="text-charcoal font-medium">February 18th to 25th</strong> at Manujothi Ashram, Sathia Nagaram. This multi-day celebration draws seekers from across India and the globe for deep spiritual reflection, congregational singing, communal vegetarian meals, and extended comparative scripture teachings.
+                <h3 className="font-serif text-2xl text-parchment mb-3">Glorification Day</h3>
+                <p className="font-sans text-sm text-parchment/60 leading-relaxed">
+                  Held every year from <strong className="text-parchment/90 font-medium">February 18th to 25th</strong> at Manujothi Ashram, Sathia Nagaram. This multi-day celebration draws seekers from across India and the globe for deep spiritual reflection, congregational singing, communal vegetarian meals, and extended comparative scripture teachings.
                 </p>
+                <a
+                  href={`https://mail.google.com/mail/?view=cm&fs=1&to=kalavnaudaykumar4512@gmail.com&su=${encodeURIComponent('Event Registration — Glorification Day · Feb 18–25')}&body=${encodeURIComponent('Dear Manujothi Ashram,\n\nI would like to register for the upcoming event:\n\n🗓 Event   : Glorification Day\n📅 Dates   : February 18 – 25\n📍 Venue   : Manujothi Ashram, Sathianagaram, Tirunelveli\n\n— My Details —\nName            : \nNumber of People : \nPhone           : \nCity / State    : \nCountry         : \n\nAny special requirements:\n\n\nWith warm regards,')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 mt-4 border border-brass/40 text-brass px-4 py-2 text-[9px] font-bold uppercase tracking-widest hover:bg-brass hover:text-charcoal transition-all duration-300 rounded-full"
+                >
+                  ✉ Register via Gmail
+                </a>
               </div>
 
               <div className="border-l-2 border-brass pl-6">
@@ -94,30 +102,40 @@ export function Events() {
                     Annual · July 21
                   </span>
                 </div>
-                <h3 className="font-serif text-2xl text-charcoal mb-3">Kalki Jayanti</h3>
-                <p className="font-sans text-sm text-charcoal/65 leading-relaxed">
-                  Observed every year on <strong className="text-charcoal font-medium">July 21st</strong>, commemorating the day the Vishwaroopam was displayed in Chicago in 1969 — the same day as the Apollo 11 moon landing. Devotees gather for praise, meditation, and scripture study.
+                <h3 className="font-serif text-2xl text-parchment mb-3">Kalki Jayanti</h3>
+                <p className="font-sans text-sm text-parchment/60 leading-relaxed">
+                  Observed every year on <strong className="text-parchment/90 font-medium">July 21st</strong>, commemorating the day the Vishwaroopam was displayed in Chicago in 1969 — the same day as the Apollo 11 moon landing. Devotees gather for praise, meditation, and scripture study.
+                </p>
+                <a
+                  href={`https://mail.google.com/mail/?view=cm&fs=1&to=kalavnaudaykumar4512@gmail.com&su=${encodeURIComponent('Event Registration — Kalki Jayanti · July 21')}&body=${encodeURIComponent('Dear Manujothi Ashram,\n\nI would like to register for the upcoming event:\n\n🗓 Event   : Kalki Jayanti\n📅 Date    : July 21\n📍 Venue   : Manujothi Ashram, Sathianagaram, Tirunelveli\n\n— My Details —\nName            : \nNumber of People : \nPhone           : \nCity / State    : \nCountry         : \n\nAny special requirements:\n\n\nWith warm regards,')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 mt-4 border border-brass/40 text-brass px-4 py-2 text-[9px] font-bold uppercase tracking-widest hover:bg-brass hover:text-charcoal transition-all duration-300 rounded-full"
+                >
+                  ✉ Register via Gmail
+                </a>
+              </div>
+
+              <div className="border-l-2 border-stone pl-6">
+                <h3 className="font-serif text-2xl text-parchment mb-3">Shree Lahari Krishna Praise &amp; Meditation Centres</h3>
+                <p className="font-sans text-sm text-parchment/60 leading-relaxed">
+                  Affiliated praise and meditation centres are active across India and internationally. Messages of Lord Shri Lahari Krishna have been broadcast on <strong className="text-parchment/90 font-medium">All India Radio (Akashvani), Tirunelveli</strong>. Contact the Ashram to locate a centre near you.
                 </p>
               </div>
 
               <div className="border-l-2 border-stone pl-6">
-                <h3 className="font-serif text-2xl text-charcoal mb-3">Shree Lahari Krishna Praise &amp; Meditation Centres</h3>
-                <p className="font-sans text-sm text-charcoal/65 leading-relaxed">
-                  Affiliated praise and meditation centres are active across India and internationally. Messages of Lord Shri Lahari Krishna have been broadcast on <strong className="text-charcoal font-medium">All India Radio (Akashvani), Tirunelveli</strong>. Contact the Ashram to locate a centre near you.
-                </p>
-              </div>
-
-              <div className="border-l-2 border-stone pl-6">
-                <h3 className="font-serif text-2xl text-charcoal mb-3">Daily Meditation</h3>
-                <p className="font-sans text-sm text-charcoal/65 leading-relaxed">
+                <h3 className="font-serif text-2xl text-parchment mb-3">Daily Meditation</h3>
+                <p className="font-sans text-sm text-parchment/60 leading-relaxed">
                   The Ashram's 63-acre grounds — with ancient banyan groves and quiet pathways along the Tamirabarani riverbank — are open for meditation, study, and personal retreat. Visitors are welcome to participate in the rhythms of Ashram life: prayer, study, simple work, and communal meals.
                 </p>
               </div>
 
               <div id="visit" className="pt-2">
                 <a
-                  href="mailto:ashram@manjothi.com"
-                  className="btn-arrow inline-flex items-center gap-3 bg-charcoal text-parchment px-8 py-4 text-xs font-semibold uppercase tracking-widest hover:bg-brass hover:text-charcoal transition-colors duration-300 rounded-full"
+                  href={`https://mail.google.com/mail/?view=cm&fs=1&to=kalavnaudaykumar4512@gmail.com&su=${encodeURIComponent('Visit Enquiry — Manujothi Ashram')}&body=${encodeURIComponent('Dear Manujothi Ashram,\n\nI would like to plan a visit to the Ashram.\n\n— My Details —\nName            : \nPhone           : \nCity / State    : \nCountry         : \nPlanned Dates   : \nNumber of People : \nPurpose of Visit : \n\nAny questions or special requirements:\n\n\nWith warm regards,')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-arrow inline-flex items-center gap-3 bg-parchment text-charcoal px-8 py-4 text-xs font-semibold uppercase tracking-widest hover:bg-brass hover:text-parchment transition-colors duration-300 rounded-full"
                 >
                   Plan Your Visit <span className="arrow">→</span>
                 </a>
@@ -203,17 +221,15 @@ export function Events() {
                     className="flex flex-col items-center gap-1 cursor-pointer group"
                   >
                     <div
-                      className={`rounded-full transition-all duration-300 ${
-                        i === activeStage
-                          ? 'w-2.5 h-2.5 bg-brass shadow-[0_0_8px_rgba(184,151,104,0.5)]'
-                          : i < activeStage
+                      className={`rounded-full transition-all duration-300 ${i === activeStage
+                        ? 'w-2.5 h-2.5 bg-brass shadow-[0_0_8px_rgba(184,151,104,0.5)]'
+                        : i < activeStage
                           ? 'w-1.5 h-1.5 bg-brass/60'
                           : 'w-1.5 h-1.5 bg-brass/25'
-                      }`}
+                        }`}
                     />
-                    <span className={`font-sans text-[6px] uppercase tracking-widest whitespace-nowrap transition-colors ${
-                      i === activeStage ? 'text-brass/80' : 'text-brass/30'
-                    }`}>
+                    <span className={`font-sans text-[6px] uppercase tracking-widest whitespace-nowrap transition-colors ${i === activeStage ? 'text-brass/80' : 'text-brass/30'
+                      }`}>
                       {i < 4 ? ['India', 'South', 'TN', 'TVL'][i] : 'Ashram'}
                     </span>
                   </button>

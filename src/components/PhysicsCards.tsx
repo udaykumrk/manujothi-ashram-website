@@ -2,7 +2,7 @@ import { useRef, useEffect, useState } from 'react';
 import Matter from 'matter-js';
 import { motion, useInView } from 'motion/react';
 
-/* ─── Card data — exact match to Vercel deployment ─── */
+/* ─── Card data ─── */
 const CARDS = [
   {
     name: 'YouTube',
@@ -28,11 +28,27 @@ const CARDS = [
   {
     name: 'Email',
     href: 'mailto:ashram@manjothi.com',
-    color: '#B89768',
-    bg: 'linear-gradient(135deg, #B89768, #9A7B50)',
+    color: '#C4884A',
+    bg: 'linear-gradient(135deg, #C4884A, #A06830)',
     icon: `<svg viewBox="0 0 24 24" fill="white" width="28" height="28"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>`,
   },
+  {
+    name: 'Events',
+    href: '__open-event-popup__',
+    color: '#E8A020',
+    bg: 'linear-gradient(150deg, #C47D0E 0%, #8B5A00 100%)',
+    icon: `<svg viewBox="0 0 24 24" fill="none" width="26" height="26"><rect x="3" y="4" width="18" height="17" rx="2" stroke="white" stroke-width="1.8"/><path d="M3 9h18" stroke="white" stroke-width="1.8"/><path d="M8 2v4M16 2v4" stroke="white" stroke-width="1.8" stroke-linecap="round"/><rect x="7" y="12" width="3" height="3" rx="0.5" fill="white" opacity="0.9"/><rect x="11" y="12" width="3" height="3" rx="0.5" fill="white" opacity="0.5"/><rect x="14" y="15" width="3" height="3" rx="0.5" fill="white" opacity="0.5"/></svg>`,
+    sub: 'Glorification Day',
+  },
+  {
+    name: 'Gallery',
+    href: '/gallery',
+    color: '#6C63FF',
+    bg: 'linear-gradient(135deg, #6C63FF, #3D35CC)',
+    icon: `<svg viewBox="0 0 24 24" fill="white" width="26" height="26"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>`,
+  },
 ];
+
 
 const CARD_W = 85;
 const CARD_H = 85;
@@ -87,24 +103,33 @@ export function PhysicsCards() {
       for (let i = 0; i < CARDS.length; i++) {
         const card = CARDS[i];
 
-        // Cards start just above the section — short drop, land near heading
-        const x = (cW / (CARDS.length + 1)) * (i + 1);
-        const y = -cardH - (i * 10);
+        // All cards start from roughly the same center point — they fall as a pile
+        const x = cW / 2 + (Math.random() - 0.5) * 20; // tiny random offset so they're not perfectly stacked
+        const y = -cardH * 2 - (i * 5); // staggered slightly vertically above the viewport
 
         // EXACT Vercel body properties
         const body = Bodies.rectangle(x, y, cardW, cardH, {
           restitution: 0.5,
           friction: 0.1,
-          frictionAir: 0.06,  // heavy air drag = slow dreamy motion when thrown
+          frictionAir: 0.04,
           density: 0.002,
-          angle: (Math.random() - 0.5) * 0.3,
+          angle: (Math.random() - 0.5) * 0.4,
           chamfer: { radius: 12 },
         });
+
+        // Give each card a random horizontal impulse so they scatter after landing
+        Body.setVelocity(body, {
+          x: (Math.random() - 0.5) * 8,
+          y: 0,
+        });
+
         Composite.add(engine.world, body);
 
+        const isEventCard = card.href === '__open-event-popup__';
+        const isInternalLink = card.href.startsWith('/');
         const el = document.createElement('a');
-        el.href = card.href;
-        if (!card.href.startsWith('mailto:')) {
+        el.href = isEventCard ? '#' : card.href;
+        if (!isEventCard && !card.href.startsWith('mailto:') && !isInternalLink) {
           el.target = '_blank';
           el.rel = 'noopener noreferrer';
         }
@@ -116,12 +141,29 @@ export function PhysicsCards() {
         `;
         el.style.setProperty('--card-color', card.color);
         el.draggable = false;
+        const subLine = (card as { sub?: string }).sub
+          ? `<span style="font-family:var(--font-sans);font-size:0.5rem;font-weight:500;letter-spacing:0.08em;color:rgba(255,255,255,0.65);">${(card as { sub?: string }).sub}</span>`
+          : '';
         el.innerHTML = `
-          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;gap:8px;pointer-events:none;">
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;gap:6px;pointer-events:none;">
             <div style="opacity:0.95;">${card.icon}</div>
             <span style="font-family:var(--font-sans);font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:white;opacity:0.9;">${card.name}</span>
+            ${subLine}
           </div>
         `;
+        if (isEventCard) {
+          el.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.dispatchEvent(new CustomEvent('open-event-popup'));
+          });
+        }
+        if (isInternalLink) {
+          el.addEventListener('click', (e) => {
+            if (isDragging) return; // drag-blocked by the global onClick handler
+            e.preventDefault();
+            window.location.href = card.href;
+          });
+        }
         scene.appendChild(el);
         cards.push({ el, body });
       }
@@ -221,22 +263,34 @@ export function PhysicsCards() {
       scene.addEventListener('touchend', onTouchEnd);
       scene.addEventListener('click', onClick, true);
 
-      // ─── Engine loop — EXACT Vercel: buoyancy force if card sinks too low ───
+      // ─── Engine loop ─── buoyancy + hard clamp so cards never escape downward ───
+      const maxY = cH - cardH; // furthest visible top-left Y a card can have
       let raf = 0;
       function update() {
         Engine.update(engine, 1000 / 60);
 
         for (const c of cards) {
-          // Buoyancy: keep any settled card from sinking below 80%
-          if (c.body.position.y > cH * 0.8 && c.body !== dragCard?.body) {
+          // Buoyancy: push up any card approaching the floor
+          if (c.body.position.y > cH * 0.75 && c.body !== dragCard?.body) {
             Body.applyForce(c.body, c.body.position, {
               x: 0,
-              y: -0.0005 * c.body.mass,
+              y: -0.001 * c.body.mass,
             });
           }
 
+          // Hard clamp — never let a card visually escape the bottom boundary
+          const rawPy = c.body.position.y - cardH / 2;
+          const clampedPy = Math.min(rawPy, maxY);
+          if (clampedPy < rawPy) {
+            // Snap physics body back and kill downward velocity
+            Body.setPosition(c.body, { x: c.body.position.x, y: cH - cardH / 2 });
+            if (c.body.velocity.y > 0) {
+              Body.setVelocity(c.body, { x: c.body.velocity.x, y: 0 });
+            }
+          }
+
           const px = c.body.position.x - cardW / 2;
-          const py = c.body.position.y - cardH / 2;
+          const py = Math.min(c.body.position.y - cardH / 2, maxY);
           const deg = c.body.angle * (180 / Math.PI);
           c.el.style.transform = `translate3d(${px}px, ${py}px, 0) rotate(${deg}deg)`;
         }
@@ -265,21 +319,23 @@ export function PhysicsCards() {
     <div ref={sectionRef} className="physics-cards-section">
       <div className="physics-cards-center">
         <motion.span
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="font-sans text-[10px] uppercase tracking-[0.3em] text-brass block"
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="font-sans text-[10px] uppercase tracking-[0.35em] text-brass block"
         >
-          Connect with Us
+          Every way to reach Manujothi Ashram
         </motion.span>
-        <motion.h2
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="font-serif text-3xl sm:text-4xl md:text-5xl text-parchment mt-3"
-        >
-          Contact Us
-        </motion.h2>
+        <div className="overflow-hidden mt-3">
+          <motion.h2
+            initial={{ y: '110%' }}
+            animate={isInView ? { y: '0%' } : {}}
+            transition={{ duration: 0.9, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+            className="font-serif text-4xl sm:text-5xl md:text-6xl text-parchment"
+          >
+            Our Channels
+          </motion.h2>
+        </div>
       </div>
 
       <div ref={containerRef} className="physics-container" />

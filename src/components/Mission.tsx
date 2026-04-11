@@ -38,9 +38,8 @@ export function Mission() {
         {/* Sub-note / College of Vedas Card — tap/click toggle for mobile */}
         <FadeIn delay={0.1} variant="fade-right">
           <div
-            className={`group relative z-0 mt-12 border border-brass/30 bg-stone/20 p-5 sm:p-8 md:p-10 text-center max-w-2xl mx-auto rounded-2xl transition-all duration-500 cursor-pointer ${
-              cardOpen ? 'scale-[1.03] z-10 shadow-2xl bg-stone/30' : 'hover:scale-[1.03] hover:z-10 hover:shadow-2xl hover:bg-stone/30'
-            }`}
+            className={`group relative z-0 mt-12 border border-brass/30 bg-stone/20 p-5 sm:p-8 md:p-10 text-center max-w-2xl mx-auto rounded-2xl transition-all duration-500 cursor-pointer ${cardOpen ? 'scale-[1.03] z-10 shadow-2xl bg-stone/30' : 'hover:scale-[1.03] hover:z-10 hover:shadow-2xl hover:bg-stone/30'
+              }`}
             onClick={() => setCardOpen((prev) => !prev)}
           >
             <span className="font-sans text-[9px] uppercase tracking-[0.3em] text-brass font-bold mb-2 block">Est. at the Ashram</span>
@@ -52,25 +51,22 @@ export function Mission() {
               stagger={0.05}
             />
             {/* Scrollable description area — click/tap to toggle on mobile, hover on desktop */}
-            <div className={`relative mt-4 overflow-hidden w-full text-center transition-all duration-500 ${
-              cardOpen ? 'min-h-[140px]' : 'group-hover:min-h-[140px]'
-            }`}>
-              {/* Default state indicator (hides when open or hovered) */}
-              <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 z-10 ${
-                cardOpen ? 'opacity-0 pointer-events-none' : 'group-hover:opacity-0'
+            <div className={`relative mt-4 overflow-hidden w-full text-center transition-all duration-500 ${cardOpen ? 'min-h-[140px]' : 'group-hover:min-h-[140px]'
               }`}>
+              {/* Default state indicator (hides when open or hovered) */}
+              <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 z-10 ${cardOpen ? 'opacity-0 pointer-events-none' : 'group-hover:opacity-0'
+                }`}>
                 <span className="font-sans text-[10px] uppercase tracking-[0.2em] text-brass/70 border border-brass/30 px-4 py-1.5 rounded-full">
                   <span className="hidden sm:inline">Hover to Read About the College</span>
                   <span className="sm:hidden">Tap to Read About the College</span>
                 </span>
               </div>
-              
+
               {/* Text container */}
-              <div className={`overflow-y-auto max-h-[140px] pr-2 custom-scrollbar text-left text-center flex flex-col gap-3 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                cardOpen
+              <div className={`overflow-y-auto max-h-[140px] pr-2 custom-scrollbar text-left text-center flex flex-col gap-3 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${cardOpen
                   ? 'translate-x-0 opacity-100'
                   : 'translate-x-[110%] opacity-0 group-hover:translate-x-0 group-hover:opacity-100'
-              }`}>
+                }`}>
                 <p className="font-sans text-sm text-charcoal/75 leading-relaxed">
                   <strong className="text-brass">A Research Centre for obtaining Eternal Life.</strong> It trains people of various religious organizations to come to the realization of <strong className="font-medium text-charcoal px-1">One God — One Nation,</strong> leaving caste, creed, and religion behind, by following the Vedic principle.
                 </p>
@@ -79,7 +75,7 @@ export function Mission() {
                 </p>
               </div>
             </div>
-            
+
           </div>
         </FadeIn>
 

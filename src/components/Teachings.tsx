@@ -42,6 +42,32 @@ const teachings = [
   },
 ];
 
+// ── Gmail compose helper — opens Gmail with pre-filled subject + body ──
+function gmailBookLink(bookTitle: string) {
+  const to = 'kalavnaudaykumar4512@gmail.com';
+  const subject = encodeURIComponent(`Book Request — ${bookTitle}`);
+  const body = encodeURIComponent(
+`Dear Manujothi Ashram,
+
+I would like to request a free copy of the following publication:
+
+📖 Book Title: ${bookTitle}
+
+— My Details —
+Name        : 
+Address     : 
+City        : 
+State       : 
+PIN Code    : 
+Phone       : 
+
+Thank you for this divine gift of knowledge.
+
+With warm regards,`
+  );
+  return `https://mail.google.com/mail/?view=cm&fs=1&to=${to}&su=${subject}&body=${body}`;
+}
+
 const books = [
   {
     spine: 'AM',
@@ -50,7 +76,7 @@ const books = [
     subtitle: '"The Nectar of Wisdom"',
     author: 'Manujothi Ashram',
     lang: 'Telugu · English',
-    link: 'mailto:ashram@manjothi.com?subject=Request%20Book%20-%20Amrutha%20Manjari%20Gnana%20Makarantham',
+    link: gmailBookLink('Amrutha Manjari — Gnana Makarantham'),
     linkLabel: '✉ Request Free Copy',
     cover: coverAmrutha,
   },
@@ -61,7 +87,7 @@ const books = [
     subtitle: '"The Sprouting Seed"',
     author: 'Manujothi Ashram',
     lang: 'Telugu · English',
-    link: 'mailto:ashram@manjothi.com?subject=Request%20Book%20-%20Amrutha%20Manjari%20Ankuram%202',
+    link: gmailBookLink('Amrutha Manjari — Ankuram 2'),
     linkLabel: '✉ Request Free Copy',
     cover: coverAnkuram,
   },
@@ -96,7 +122,7 @@ const books = [
     subtitle: 'Devotional hymns & collected songs',
     author: 'Manujothi Ashram',
     lang: 'Tamil · Telugu',
-    link: 'mailto:ashram@manjothi.com?subject=Request%20Book%20-%20Krishna%20Lahari',
+    link: gmailBookLink('Krishna Lahari'),
     linkLabel: '✉ Request Free Copy',
     cover: coverKrishna,
   },
@@ -107,7 +133,7 @@ const books = [
     subtitle: 'Compiled teachings 1969–1989',
     author: 'Manujothi Ashram',
     lang: 'Multi-language',
-    link: 'mailto:ashram@manjothi.com?subject=Request%20Book%20-%20Messages%20and%20Sermons',
+    link: gmailBookLink('Shree Lahari Krishna — Messages & Sermons'),
     linkLabel: '✉ Request Free Copy',
     cover: coverSermons,
   },
@@ -285,7 +311,7 @@ export function Teachings() {
                           <a
                             href={book.link}
                             {...(book.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                            className="btn-arrow inline-flex items-center gap-2 bg-brass text-charcoal px-4 py-2.5 text-[9px] font-bold uppercase tracking-widest hover:bg-parchment transition-colors duration-300 w-fit rounded-full"
+                            className="btn-arrow inline-flex items-center gap-2 bg-brass text-charcoal px-4 py-2.5 text-[9px] font-bold uppercase tracking-widest hover: transition-colors duration-300 w-fit rounded-full"
                           >
                             {book.linkLabel} <span className="arrow">→</span>
                           </a>
@@ -304,8 +330,10 @@ export function Teachings() {
               </p>
               <div className="flex flex-col sm:flex-row flex-wrap gap-3 flex-shrink-0 w-full sm:w-auto">
                 <a
-                  href="mailto:ashram@manjothi.com?subject=Request%20Free%20Publications"
-                  className="btn-arrow inline-flex items-center gap-2 bg-brass text-charcoal px-5 py-2.5 text-[9px] font-bold uppercase tracking-widest hover:bg-parchment transition-colors duration-300 rounded-full w-full sm:w-auto"
+                  href={`https://mail.google.com/mail/?view=cm&fs=1&to=kalavnaudaykumar4512@gmail.com&su=${encodeURIComponent('Request — Free Publications from Manujothi Ashram')}&body=${encodeURIComponent('Dear Manujothi Ashram,\n\nI would like to request the following free publications:\n\nBooks Requested:\n1. \n2. \n\n— My Details —\nName        : \nAddress     : \nCity        : \nState       : \nPIN Code    : \nPhone       : \n\nThank you.\n\nWith warm regards,')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-arrow inline-flex items-center gap-2 bg-brass text-charcoal px-5 py-2.5 text-[9px] font-bold uppercase tracking-widest hover: transition-colors duration-300 rounded-full w-full sm:w-auto"
                 >
                   Request Free Copies <span className="arrow">→</span>
                 </a>
