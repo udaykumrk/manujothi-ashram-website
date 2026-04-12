@@ -85,8 +85,8 @@ export function Gallery() {
   // ===================================
   // PHASE 1: The Grid (0.0 -> 0.12)
   // ===================================
-  const deskMainWidth = useTransform(videoProgress, [0.04, 0.12], ["400px", "1200px"]);
-  const deskMainHeight = useTransform(videoProgress, [0.04, 0.12], ["240px", "720px"]);
+  const deskMainWidth = useTransform(videoProgress, [0.04, 0.12], ["320px", "860px"]);
+  const deskMainHeight = useTransform(videoProgress, [0.04, 0.12], ["200px", "520px"]);
   const leftColumnY = useTransform(videoProgress, [0.04, 0.12], [0, 800]);
   const rightColumnY = useTransform(videoProgress, [0.04, 0.12], [0, -800]);
   const bgBlurOpacity = useTransform(videoProgress, [0.06, 0.12], [0, 1]);
@@ -121,17 +121,17 @@ export function Gallery() {
   const img0ZRaw = useTransform(videoProgress, [0.30, 0.37], [30, 10]);
 
   const img1X = useTransform(videoProgress, [0.30, 0.37, 0.40, 0.47], ["0vw", "-40vw", "-40vw", "-90vw"]);
-  const img1Scale = useTransform(videoProgress, [0.30, 0.37, 0.40, 0.47], [1.1, 0.8, 0.8, 0.5]);
+  const img1Scale = useTransform(videoProgress, [0.30, 0.37, 0.40, 0.47], [0.88, 0.65, 0.65, 0.4]);
   const img1Opacity = useTransform(videoProgress, [0.30, 0.37, 0.40, 0.47], [1, 0.4, 0.4, 0]);
   const img1ZRaw = useTransform(videoProgress, [0.30, 0.37, 0.40, 0.47], [50, 30, 30, 10]);
 
   const img2X = useTransform(videoProgress, [0.30, 0.37, 0.40, 0.47], ["40vw", "0vw", "0vw", "-40vw"]);
-  const img2Scale = useTransform(videoProgress, [0.30, 0.37, 0.40, 0.47], [0.8, 1.1, 1.1, 0.8]);
+  const img2Scale = useTransform(videoProgress, [0.30, 0.37, 0.40, 0.47], [0.65, 0.88, 0.88, 0.65]);
   const img2Opacity = useTransform(videoProgress, [0.30, 0.37, 0.40, 0.47], [0.4, 1, 1, 0.4]);
   const img2ZRaw = useTransform(videoProgress, [0.30, 0.37, 0.40, 0.47], [30, 50, 50, 30]);
 
   const img3X = useTransform(videoProgress, [0.30, 0.37, 0.40, 0.47], ["90vw", "40vw", "40vw", "0vw"]);
-  const img3Scale = useTransform(videoProgress, [0.30, 0.37, 0.40, 0.47], [0.5, 0.8, 0.8, 1.1]);
+  const img3Scale = useTransform(videoProgress, [0.30, 0.37, 0.40, 0.47], [0.4, 0.65, 0.65, 0.88]);
   const img3Opacity = useTransform(videoProgress, [0.30, 0.37, 0.40, 0.47], [0, 0.4, 0.4, 1]);
   const img3ZRaw = useTransform(videoProgress, [0.30, 0.37, 0.40, 0.47], [10, 30, 30, 50]);
 
@@ -162,7 +162,7 @@ export function Gallery() {
   // The magic trick: Automating the Hover Untwist mechanically!
   // At 0.70 to 0.75, the central card perfectly zeroes its state while siblings blur back natively.
   const pCenterRotate = useTransform(videoProgress, [0.69, 0.73], [-5, 0]);
-  const pCenterScale = useTransform(videoProgress, [0.69, 0.73], [1, 1.25]);
+  const pCenterScale = useTransform(videoProgress, [0.69, 0.73], [1, 1.05]);
 
   const pOthersScale = useTransform(videoProgress, [0.69, 0.73], [1, 0.85]);
   const pOthersBlurRaw = useTransform(videoProgress, [0.69, 0.73], [0, 8]);
@@ -180,12 +180,12 @@ export function Gallery() {
   const slabCenterOverlay = useTransform(videoProgress, [0.88, 0.92], [0.5, 0]);
 
   // Mobile mappings
-  const mobMainHeight = useTransform(videoProgress, [0.04, 0.12], ["240px", "560px"]);
-  const mobileStackY = useTransform(videoProgress, [0.04, 0.12], [0, 340]);
+  const mobMainHeight = useTransform(videoProgress, [0.04, 0.12], ["180px", "380px"]);
+  const mobileStackY = useTransform(videoProgress, [0.04, 0.12], [0, 220]);
 
 
   return (
-    <section id="gallery" ref={containerRef} className="relative bg-[#111111] h-screen min-h-[700px] overflow-hidden mx-4 my-6 rounded-3xl" style={{ boxShadow: '0 8px 60px rgba(0,0,0,0.25)' }}>
+    <section id="gallery" ref={containerRef} className="relative bg-[#111111] h-screen min-h-[700px] mx-4 my-6 rounded-3xl" style={{ boxShadow: '0 8px 60px rgba(0,0,0,0.25)', overflow: 'hidden', clipPath: 'inset(0px round 1.5rem)' }}>
 
       {/* --- PHASE 1 GRID & HERO --- */}
       <motion.div style={{ y: heroY, opacity: heroOpacity }} className="absolute inset-0 z-[10] flex items-center justify-center pointer-events-none">
