@@ -141,43 +141,27 @@ export function Gallery() {
   const z3 = useTransform(img3ZRaw, Math.round);
 
   // ===================================
-  // PHASE 4: Quantum Circles (0.49 -> 0.65)
+  // PHASE 5: Automated Polaroid Scatter (0.48 -> 0.72)
   // ===================================
-  const qOpacity = useTransform(videoProgress, [0.48, 0.50, 0.63, 0.65], [0, 1, 1, 0]);
-  const qTextY = useTransform(videoProgress, [0.48, 0.52], [50, 0]);
-  const qTextOpac = useTransform(videoProgress, [0.48, 0.52], [0, 1]);
+  const pOpacity = useTransform(videoProgress, [0.48, 0.51, 0.68, 0.72], [0, 1, 1, 0]);
 
-  // Parallax mapping tracking linearly across the entire phase duration
-  const q1Y = useTransform(videoProgress, [0.49, 0.65], [300, -300]);
-  const q2Y = useTransform(videoProgress, [0.49, 0.65], [-100, 400]);
-  const q3Y = useTransform(videoProgress, [0.49, 0.65], [150, -400]);
-  const q4Y = useTransform(videoProgress, [0.49, 0.65], [-50, 200]);
-  const q5Y = useTransform(videoProgress, [0.49, 0.65], [0, 600]);
+  const pCenterRotate = useTransform(videoProgress, [0.53, 0.60], [-5, 0]);
+  const pCenterScale = useTransform(videoProgress, [0.53, 0.60], [1, 1.05]);
 
-  // ===================================
-  // PHASE 5: Automated Polaroid Scatter (0.65 -> 0.82)
-  // ===================================
-  const pOpacity = useTransform(videoProgress, [0.65, 0.67, 0.80, 0.82], [0, 1, 1, 0]);
-
-  // The magic trick: Automating the Hover Untwist mechanically!
-  // At 0.70 to 0.75, the central card perfectly zeroes its state while siblings blur back natively.
-  const pCenterRotate = useTransform(videoProgress, [0.69, 0.73], [-5, 0]);
-  const pCenterScale = useTransform(videoProgress, [0.69, 0.73], [1, 1.05]);
-
-  const pOthersScale = useTransform(videoProgress, [0.69, 0.73], [1, 0.85]);
-  const pOthersBlurRaw = useTransform(videoProgress, [0.69, 0.73], [0, 8]);
+  const pOthersScale = useTransform(videoProgress, [0.53, 0.60], [1, 0.85]);
+  const pOthersBlurRaw = useTransform(videoProgress, [0.53, 0.60], [0, 8]);
   const pOthersBlur = useMotionTemplate`blur(${pOthersBlurRaw}px) brightness(0.6)`;
   const pNoBlur = useMotionTemplate`blur(0px) brightness(1)`;
 
   // ===================================
-  // PHASE 6: Monolithic Breathing Pillars (0.83 -> 1.00)
+  // PHASE 6: Monolithic Breathing Pillars (0.73 -> 1.00)
   // ===================================
-  const slabsOpacity = useTransform(videoProgress, [0.82, 0.85, 0.98, 1], [0, 1, 1, 0]);
+  const slabsOpacity = useTransform(videoProgress, [0.72, 0.76, 0.98, 1], [0, 1, 1, 0]);
 
-  const slabCenterBasis = useTransform(videoProgress, [0.88, 0.94], ["25%", "65%"]);
-  const slabOthersBasis = useTransform(videoProgress, [0.88, 0.94], ["25%", "11.6%"]);
-  const slabCenterImgScale = useTransform(videoProgress, [0.88, 0.95], [1.2, 1]);
-  const slabCenterOverlay = useTransform(videoProgress, [0.88, 0.92], [0.5, 0]);
+  const slabCenterBasis = useTransform(videoProgress, [0.80, 0.92], ["25%", "65%"]);
+  const slabOthersBasis = useTransform(videoProgress, [0.80, 0.92], ["25%", "11.6%"]);
+  const slabCenterImgScale = useTransform(videoProgress, [0.80, 0.94], [1.2, 1]);
+  const slabCenterOverlay = useTransform(videoProgress, [0.80, 0.86], [0.5, 0]);
 
   // Mobile mappings
   const mobMainHeight = useTransform(videoProgress, [0.04, 0.12], ["180px", "380px"]);
@@ -310,19 +294,6 @@ export function Gallery() {
             <img src={gallery.carousel[3]} className="w-full h-full object-cover" />
           </motion.div>
         </div>
-      </motion.div>
-
-      {/* --- PHASE 4 QUANTUM CIRCLES (AUTOMATED PARALLAX) --- */}
-      <motion.div style={{ opacity: qOpacity }} className="absolute inset-0 z-[40] bg-[#0a0a0a] pointer-events-none overflow-hidden flex items-center justify-center">
-        <motion.div style={{ y: qTextY, opacity: qTextOpac }} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[60] text-center mix-blend-screen">
-          <h2 className="font-[var(--font-serif)] text-8xl tracking-[-4px] text-white/50">ETERNITY</h2>
-        </motion.div>
-
-        <motion.div style={{ y: q1Y }} className="absolute left-[8%] w-[380px] rounded-full aspect-square overflow-hidden shadow-2xl z-50 border border-white/5"><img src={gallery.phase4[0]} className="w-full h-full object-cover scale-110" /></motion.div>
-        <motion.div style={{ y: q2Y }} className="absolute right-[12%] w-[480px] h-[600px] rounded-[8rem] overflow-hidden shadow-2xl z-40 border border-white/5"><img src={gallery.phase4[1]} className="w-full h-full object-cover scale-125" /></motion.div>
-        <motion.div style={{ y: q3Y }} className="absolute left-[35%] w-[650px] aspect-square rounded-full overflow-hidden shadow-2xl z-20 border border-white/5"><img src={gallery.phase4[2]} className="w-full h-full object-cover scale-100" /></motion.div>
-        <motion.div style={{ y: q4Y }} className="absolute right-[25%] w-[250px] aspect-square rounded-full overflow-hidden shadow-2xl z-50 border border-white/5"><img src={gallery.phase4[3]} className="w-full h-full object-cover scale-110" /></motion.div>
-        <motion.div style={{ y: q5Y }} className="absolute left-[20%] w-[350px] h-[250px] rounded-[4rem] overflow-hidden shadow-2xl z-30 border border-white/5"><img src={gallery.phase4[4]} className="w-full h-full object-cover scale-110" /></motion.div>
       </motion.div>
 
       {/* --- PHASE 5 AUTOMATED POLAROID DECK --- */}
