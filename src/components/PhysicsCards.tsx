@@ -34,11 +34,11 @@ const CARDS = [
   },
   {
     name: 'Events',
-    href: '__open-event-popup__',
+    href: '/events',
     color: '#E8A020',
     bg: 'linear-gradient(150deg, #C47D0E 0%, #8B5A00 100%)',
     icon: `<svg viewBox="0 0 24 24" fill="none" width="26" height="26"><rect x="3" y="4" width="18" height="17" rx="2" stroke="white" stroke-width="1.8"/><path d="M3 9h18" stroke="white" stroke-width="1.8"/><path d="M8 2v4M16 2v4" stroke="white" stroke-width="1.8" stroke-linecap="round"/><rect x="7" y="12" width="3" height="3" rx="0.5" fill="white" opacity="0.9"/><rect x="11" y="12" width="3" height="3" rx="0.5" fill="white" opacity="0.5"/><rect x="14" y="15" width="3" height="3" rx="0.5" fill="white" opacity="0.5"/></svg>`,
-    sub: 'Glorification Day',
+    sub: 'All Events',
   },
   {
     name: 'Gallery',
