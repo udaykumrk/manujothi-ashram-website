@@ -129,6 +129,8 @@ export function PhysicsCards() {
         const isInternalLink = card.href.startsWith('/');
         const el = document.createElement('a');
         el.href = isEventCard ? '#' : card.href;
+        // Store href as data attribute so touchend can read it directly
+        el.dataset.cardHref = card.href;
         if (!isEventCard && !card.href.startsWith('mailto:') && !isInternalLink) {
           el.target = '_blank';
           el.rel = 'noopener noreferrer';
@@ -151,6 +153,7 @@ export function PhysicsCards() {
             ${subLine}
           </div>
         `;
+        // Desktop click listeners (touch uses onTouchEnd direct navigation below)
         if (isEventCard) {
           el.addEventListener('click', (e) => {
             e.preventDefault();
@@ -159,7 +162,7 @@ export function PhysicsCards() {
         }
         if (isInternalLink) {
           el.addEventListener('click', (e) => {
-            if (isDragging) return; // drag-blocked by the global onClick handler
+            if (isDragging) return;
             e.preventDefault();
             window.location.href = card.href;
           });
@@ -259,14 +262,27 @@ export function PhysicsCards() {
           y: isDragging ? dragVel.y * 0.3 : 0,
         });
         const wasDrag = touchMoved;
+        const tappedEl = dragCard.el as HTMLElement;
         dragCard = null;
         touchMoved = false;
-        // If it was a real drag, briefly block the click that fires right after
+
         if (wasDrag) {
+          // Real drag — briefly block any stray click
           isDragging = true;
           setTimeout(() => { isDragging = false; }, 120);
         } else {
-          isDragging = false;   // tap: allow click through immediately
+          // Pure tap — navigate directly (touch-action:none suppresses synthetic clicks on mobile)
+          isDragging = false;
+          const href = (tappedEl as HTMLAnchorElement).dataset.cardHref || '';
+          if (href === '__open-event-popup__') {
+            window.dispatchEvent(new CustomEvent('open-event-popup'));
+          } else if (href.startsWith('/')) {
+            window.location.href = href;
+          } else if (href.startsWith('mailto:')) {
+            window.location.href = href;
+          } else if (href) {
+            window.open(href, '_blank', 'noopener,noreferrer');
+          }
         }
       };
 
