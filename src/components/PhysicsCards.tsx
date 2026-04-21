@@ -172,6 +172,8 @@ export function PhysicsCards() {
       let dragCard: CardEntry | null = null;
       let isDragging = false;
       let prevPos = { x: 0, y: 0 };
+      let touchStartPos = { x: 0, y: 0 };
+      let touchMoved = false;
       let dragVel = { x: 0, y: 0 };
 
       function getPos(e: MouseEvent | Touch) {
@@ -223,16 +225,27 @@ export function PhysicsCards() {
         const hit = hitTest(p.x, p.y);
         if (hit) {
           dragCard = hit;
-          isDragging = true;
+          isDragging = false;    // not a drag until finger moves
+          touchMoved = false;
           prevPos = p;
+          touchStartPos = p;
           dragVel = { x: 0, y: 0 };
           Body.setStatic(hit.body, true);
         }
       };
       const onTouchMove = (e: TouchEvent) => {
         if (!dragCard) return;
-        e.preventDefault();
         const p = getPos(e.touches[0]);
+        // Only become a drag if finger moved >8px
+        if (!touchMoved) {
+          const dx = p.x - touchStartPos.x;
+          const dy = p.y - touchStartPos.y;
+          if (Math.sqrt(dx * dx + dy * dy) > 8) {
+            isDragging = true;
+            touchMoved = true;
+          }
+        }
+        e.preventDefault();
         dragVel = { x: p.x - prevPos.x, y: p.y - prevPos.y };
         prevPos = p;
         Body.setPosition(dragCard.body, p);
@@ -241,13 +254,20 @@ export function PhysicsCards() {
       const onTouchEnd = () => {
         if (!dragCard) return;
         Body.setStatic(dragCard.body, false);
-        // Slow-motion throw: 30% of real pointer velocity
         Body.setVelocity(dragCard.body, {
-          x: dragVel.x * 0.3,
-          y: dragVel.y * 0.3,
+          x: isDragging ? dragVel.x * 0.3 : 0,
+          y: isDragging ? dragVel.y * 0.3 : 0,
         });
+        const wasDrag = touchMoved;
         dragCard = null;
-        setTimeout(() => { isDragging = false; }, 100);
+        touchMoved = false;
+        // If it was a real drag, briefly block the click that fires right after
+        if (wasDrag) {
+          isDragging = true;
+          setTimeout(() => { isDragging = false; }, 120);
+        } else {
+          isDragging = false;   // tap: allow click through immediately
+        }
       };
 
       // Block link clicks while dragging

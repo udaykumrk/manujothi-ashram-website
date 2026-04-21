@@ -1,6 +1,81 @@
 import { useState, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { AshramEmblem } from './AshramEmblem';
+
+interface NavLink { name: string; href: string; }
+
+/* ─── Portal component — mounts directly on document.body ───────────────────
+   This escapes the nav's backdrop-filter stacking context so position:fixed
+   inside .mobile-menu-overlay always anchors to the TRUE viewport top,
+   regardless of scroll position. Without this, backdrop-filter on the nav
+   breaks fixed-position children in all major mobile browsers.
+*/
+function MobileMenuPortal({
+  isOpen,
+  navLinks,
+  onLinkClick,
+}: {
+  isOpen: boolean;
+  navLinks: NavLink[];
+  onLinkClick: (href: string) => void;
+}) {
+  return createPortal(
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          className="mobile-menu-overlay"
+        >
+          <div className="mobile-menu-content">
+            {navLinks.map((link, i) => (
+              <motion.a
+                key={link.name}
+                href={link.href}
+                onClick={(e) => {
+                  e.preventDefault();
+                  onLinkClick(link.href);
+                }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 + i * 0.06, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                className="mobile-menu-link"
+              >
+                <span className="mobile-menu-link-number">0{i + 1}</span>
+                <span className="mobile-menu-link-text">{link.name}</span>
+              </motion.a>
+            ))}
+            <motion.a
+              href="#support"
+              onClick={(e) => {
+                e.preventDefault();
+                onLinkClick('#support');
+              }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 + navLinks.length * 0.06, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              className="mobile-menu-cta"
+            >
+              Support the Mission
+            </motion.a>
+          </div>
+
+          {/* Decorative bottom line */}
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ delay: 0.5, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="mobile-menu-decoration"
+          />
+        </motion.div>
+      )}
+    </AnimatePresence>,
+    document.body,
+  );
+}
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,7 +96,7 @@ export function Navbar() {
     return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
 
-  const navLinks = [
+  const navLinks: NavLink[] = [
     { name: 'About Us', href: '#about' },
     { name: 'Core Teachings', href: '#teachings' },
     { name: 'Publications', href: '#publications' },
@@ -104,10 +179,10 @@ export function Navbar() {
               </a>
             </div>
 
-            {/* Mobile Hamburger — Animated bars → X */}
+            {/* Mobile Hamburger — z-[55] keeps it above the portal overlay (z-48) */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="hamburger-btn md:hidden w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-full border border-brass/30 shadow-[0_0_12px_rgba(184,151,104,0.08)] backdrop-blur-sm transition-all duration-300 hover:border-brass/60 hover:shadow-[0_0_18px_rgba(184,151,104,0.15)] active:scale-95"
+              className="hamburger-btn md:hidden w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-full border border-brass/30 shadow-[0_0_12px_rgba(184,151,104,0.08)] backdrop-blur-sm transition-all duration-300 hover:border-brass/60 hover:shadow-[0_0_18px_rgba(184,151,104,0.15)] active:scale-95 relative z-[55]"
               aria-label="Toggle menu"
               aria-expanded={isOpen}
             >
@@ -119,63 +194,14 @@ export function Navbar() {
             </button>
           </div>
         </div>
-
-        {/* Mobile fullscreen overlay menu */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              className="mobile-menu-overlay"
-            >
-              <div className="mobile-menu-content">
-                {navLinks.map((link, i) => (
-                  <motion.a
-                    key={link.name}
-                    href={link.href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleMobileNavClick(link.href);
-                    }}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 + i * 0.06, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                    className="mobile-menu-link"
-                  >
-                    <span className="mobile-menu-link-number">0{i + 1}</span>
-                    <span className="mobile-menu-link-text">{link.name}</span>
-                  </motion.a>
-                ))}
-                <motion.a
-                  href="#support"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleMobileNavClick('#support');
-                  }}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + navLinks.length * 0.06, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                  className="mobile-menu-cta"
-                >
-                  Support the Mission
-                </motion.a>
-              </div>
-
-              {/* Decorative bottom line */}
-              <motion.div
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ delay: 0.5, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                className="mobile-menu-decoration"
-              />
-            </motion.div>
-          )}
-        </AnimatePresence>
       </nav>
+
+      {/* Mobile menu rendered via portal — outside nav, directly on body */}
+      <MobileMenuPortal
+        isOpen={isOpen}
+        navLinks={navLinks}
+        onLinkClick={handleMobileNavClick}
+      />
     </>
   );
 }
-
-
