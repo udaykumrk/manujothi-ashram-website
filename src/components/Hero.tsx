@@ -16,6 +16,7 @@ export function Hero() {
           muted
           loop
           playsInline
+          preload="auto"
           className="w-full h-full object-cover"
           onLoadedMetadata={(e) => {
             (e.target as HTMLVideoElement).playbackRate = 0.5;
@@ -39,9 +40,9 @@ export function Hero() {
         {/* Title line 1 */}
         <div className="overflow-hidden">
           <motion.h1
-            initial={{ opacity: 0, y: 60 }}
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             className="font-serif font-light leading-[0.95] tracking-tight"
             style={{ fontSize: 'clamp(2.8rem, 8vw, 6.5rem)', color: '#fff', textShadow: '0 4px 60px rgba(0,0,0,0.6)' }}
           >
@@ -52,9 +53,9 @@ export function Hero() {
         {/* Title line 2 — gold */}
         <div className="overflow-hidden mb-6">
           <motion.h1
-            initial={{ opacity: 0, y: 60 }}
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.52, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.7, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
             className="font-serif font-light leading-[0.95] tracking-tight"
             style={{ fontSize: 'clamp(2.8rem, 8vw, 6.5rem)', color: '#C4884A', textShadow: '0 4px 60px rgba(160,100,20,0.5)' }}
           >
@@ -66,16 +67,16 @@ export function Hero() {
         <motion.div
           initial={{ opacity: 0, scaleX: 0 }}
           animate={{ opacity: 1, scaleX: 1 }}
-          transition={{ duration: 0.8, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.6, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
           style={{ originX: 0, height: '1px', maxWidth: '80px', background: 'linear-gradient(to right, #C4884A, transparent)', marginBottom: '1rem' }}
         />
 
         {/* Tagline — Light to Mankind */}
         <motion.p
           className="font-sans text-[11px] sm:text-xs uppercase tracking-[0.5em] text-[#C4884A]/90 mb-6"
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
           style={{ textShadow: '0 2px 20px rgba(0,0,0,0.8)' }}
         >
           Light to Mankind
@@ -83,9 +84,9 @@ export function Hero() {
 
         {/* Scripture quote */}
         <motion.blockquote
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.85 }}
+          transition={{ duration: 0.7, delay: 0.35 }}
           className="max-w-lg mb-8"
         >
           <p className="font-serif italic text-sm sm:text-base text-white/65 leading-loose mb-2">
@@ -99,9 +100,9 @@ export function Hero() {
 
         {/* CTAs */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.05 }}
+          transition={{ duration: 0.6, delay: 0.45 }}
           className="flex flex-wrap items-center gap-4"
         >
           <a href="#teachings"

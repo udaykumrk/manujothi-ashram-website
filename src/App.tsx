@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
@@ -10,8 +10,19 @@ import { Donation } from './components/Donation';
 import { Footer } from './components/Footer';
 import { EventPopup } from './components/EventPopup';
 import { Gallery } from './components/Gallery';
-import { GalleryPage } from './pages/GalleryPage';
-import { EventsPage } from './pages/EventsPage';
+
+// Lazy-loaded sub-pages — their JS chunk is only downloaded when the user navigates there
+const GalleryPage = lazy(() => import('./pages/GalleryPage').then(m => ({ default: m.GalleryPage })));
+const EventsPage  = lazy(() => import('./pages/EventsPage').then(m => ({ default: m.EventsPage })));
+
+function PageLoader() {
+  return (
+    <div style={{ minHeight: '100dvh', background: '#1A1C20', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ width: 32, height: 32, border: '2px solid rgba(184,151,104,0.2)', borderTop: '2px solid #B89768', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+    </div>
+  );
+}
 
 function HomePage() {
   const footerSentinelRef = useRef<HTMLDivElement>(null);
@@ -58,8 +69,8 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
-      <Route path="/gallery" element={<GalleryPage />} />
-      <Route path="/events" element={<EventsPage />} />
+      <Route path="/gallery" element={<Suspense fallback={<PageLoader />}><GalleryPage /></Suspense>} />
+      <Route path="/events"  element={<Suspense fallback={<PageLoader />}><EventsPage /></Suspense>} />
     </Routes>
   );
 }
