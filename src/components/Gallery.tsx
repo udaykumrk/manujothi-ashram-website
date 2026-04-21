@@ -254,14 +254,14 @@ export function Gallery() {
       <motion.div style={{ y: phase2Y, opacity: phase2Opacity }} className="absolute inset-0 z-[20] flex items-center justify-center pointer-events-none">
         <div className="w-full px-12 py-12 grid grid-cols-12 gap-16 items-center max-w-screen-2xl">
           <div className="col-span-7">
-            <div className="overflow-hidden"><motion.div style={{ y: t1YReveal }}><span className="text-[#d4af77] tracking-[2.5px] uppercase">TIMELINE IMMERSION</span></motion.div></div>
+            <div className="overflow-hidden"><motion.div style={{ y: t1YReveal }}><span className="text-[#d4af77] tracking-[2.5px] uppercase">Tirunelveli · Est. 1963</span></motion.div></div>
             <h2 className="font-[var(--font-serif)] text-7xl leading-[1.0] tracking-[-2px] text-white mt-4 flex flex-col gap-0 pb-2">
-              <div className="overflow-hidden py-1"><motion.span style={{ y: t2YReveal, display: "block" }}>TIMELESS SPIRITUALITY</motion.span></div>
-              <div className="overflow-hidden py-1"><motion.span style={{ y: t2YReveal, display: "block" }}>WELLNESS-CENTERED</motion.span></div>
+              <div className="overflow-hidden py-1"><motion.span style={{ y: t2YReveal, display: "block" }}>LIGHT TO</motion.span></div>
+              <div className="overflow-hidden py-1"><motion.span style={{ y: t2YReveal, display: "block" }}>MANKIND</motion.span></div>
             </h2>
             <div className="mt-12 overflow-hidden py-2">
               <motion.div style={{ y: t3YReveal }} className="text-white/80 text-[21px] font-light max-w-prose">
-                Watch as we flow continuously through multiple state-of-the-art Dribbble-inspired web galleries fully automated by mathematics and sheer rendering physics across a single 40-second timeline.
+                Founded in 1963 on the banks of the sacred Tamirabarani river, Manujothi Ashram is a 63-acre sanctuary of comparative scripture study, congregational praise, and communal living — open to all sincere seekers regardless of faith or nationality.
               </motion.div>
             </div>
           </div>
