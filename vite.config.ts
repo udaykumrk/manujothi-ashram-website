@@ -17,8 +17,24 @@ export default defineConfig(({mode}) => {
     },
     server: {
       // HMR is disabled in AI Studio via DISABLE_HMR env var.
-      // Do not modifyâfile watching is disabled to prevent flickering during agent edits.
       hmr: process.env.DISABLE_HMR !== 'true',
+    },
+    build: {
+      // Split into smaller parallel-loadable chunks
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            // React core — rarely changes, long-term cached
+            'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+            // Framer Motion — large animation library, separate chunk
+            'motion-vendor': ['motion/react'],
+            // Matter.js physics — only needed below fold in PhysicsCards
+            'matter-vendor': ['matter-js'],
+          },
+        },
+      },
+      minify: 'esbuild',
+      target: 'es2015',
     },
   };
 });

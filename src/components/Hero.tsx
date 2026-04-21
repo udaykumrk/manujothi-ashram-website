@@ -16,7 +16,8 @@ export function Hero() {
           muted
           loop
           playsInline
-          preload="auto"
+          preload="metadata"
+          poster="/ashram_hero_dawn.png"
           className="w-full h-full object-cover"
           onLoadedMetadata={(e) => {
             (e.target as HTMLVideoElement).playbackRate = 0.5;
@@ -82,12 +83,10 @@ export function Hero() {
           Light to Mankind
         </motion.p>
 
-        {/* Scripture quote */}
-        <motion.blockquote
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.35 }}
+        {/* Scripture quote — no JS animation so browser can LCP-paint it immediately after hydration */}
+        <blockquote
           className="max-w-lg mb-8"
+          style={{ animation: 'heroFadeUp 0.6s ease 0.2s both' }}
         >
           <p className="font-serif italic text-sm sm:text-base text-white/65 leading-loose mb-2">
             "As the lightning cometh out of the East, and shineth even unto the West; so shall also the coming of the Son of Man be."
@@ -96,7 +95,7 @@ export function Hero() {
             <span className="h-px w-5 inline-block bg-[#C4884A]/40" />
             Matthew 24:27
           </cite>
-        </motion.blockquote>
+        </blockquote>
 
         {/* CTAs */}
         <motion.div
