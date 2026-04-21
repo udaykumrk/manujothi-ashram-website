@@ -206,6 +206,23 @@ export function EventPopup() {
             >
               ✉ Register via Gmail
             </a>
+
+            {/* Link to full events page */}
+            <a
+              href="/events"
+              style={{
+                fontFamily: 'var(--font-sans)', fontSize: '0.58rem',
+                textTransform: 'uppercase', letterSpacing: '0.25em',
+                color: 'rgba(212,168,83,0.45)',
+                textDecoration: 'none',
+                marginTop: '0.2rem',
+                transition: 'color 0.2s ease',
+              }}
+              onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'rgba(212,168,83,0.8)'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'rgba(212,168,83,0.45)'; }}
+            >
+              View All Events →
+            </a>
           </div>
 
           {/* Bottom tagline */}

@@ -11,6 +11,7 @@ import { Footer } from './components/Footer';
 import { EventPopup } from './components/EventPopup';
 import { Gallery } from './components/Gallery';
 import { GalleryPage } from './pages/GalleryPage';
+import { EventsPage } from './pages/EventsPage';
 
 function HomePage() {
   const footerSentinelRef = useRef<HTMLDivElement>(null);
@@ -58,6 +59,7 @@ export default function App() {
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/gallery" element={<GalleryPage />} />
+      <Route path="/events" element={<EventsPage />} />
     </Routes>
   );
 }

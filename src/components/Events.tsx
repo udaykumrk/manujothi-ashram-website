@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FadeIn } from './FadeIn';
 import { TextReveal } from './TextReveal';
 import { motion, AnimatePresence } from 'motion/react';
@@ -23,6 +24,7 @@ export function Events() {
   const [activeStage, setActiveStage] = useState(0);
   const [hasStarted, setHasStarted] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   /* Start animation when the box scrolls into view */
   useEffect(() => {
@@ -130,7 +132,7 @@ export function Events() {
                 </p>
               </div>
 
-              <div id="visit" className="pt-2">
+              <div id="visit" className="pt-2 flex flex-wrap gap-3 items-center">
                 <a
                   href={`https://mail.google.com/mail/?view=cm&fs=1&to=kalavnaudaykumar4512@gmail.com&su=${encodeURIComponent('Visit Enquiry — Manujothi Ashram')}&body=${encodeURIComponent('Dear Manujothi Ashram,\n\nI would like to plan a visit to the Ashram.\n\n— My Details —\nName            : \nPhone           : \nCity / State    : \nCountry         : \nPlanned Dates   : \nNumber of People : \nPurpose of Visit : \n\nAny questions or special requirements:\n\n\nWith warm regards,')}`}
                   target="_blank"
@@ -139,6 +141,12 @@ export function Events() {
                 >
                   Plan Your Visit <span className="arrow">→</span>
                 </a>
+                <button
+                  onClick={() => navigate('/events')}
+                  className="inline-flex items-center gap-2 border border-brass/40 text-brass px-6 py-4 text-xs font-semibold uppercase tracking-widest hover:bg-brass hover:text-charcoal transition-all duration-300 rounded-full"
+                >
+                  View All Events →
+                </button>
               </div>
 
             </div>
