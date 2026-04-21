@@ -140,11 +140,11 @@ export function Footer() {
                     { href: 'https://www.youtube.com/channel/UC7yXvYXVzDx-FwfgZpX07Rg', icon: <YouTubeIcon />, color: '#FF0000', label: 'YouTube' },
                     { href: 'https://facebook.com', icon: <FacebookIcon />, color: '#1877F2', label: 'Facebook' },
                     { href: 'https://www.instagram.com/soundarya_lahari_creations?igsh=ajVveG5ldXBmczg=', icon: <InstagramIcon />, color: '#E4405F', label: 'Instagram' },
-                    { href: 'mailto:ashram@manjothi.com', icon: <MailIcon />, color: '#C4884A', label: 'Email' },
+                    { href: `https://mail.google.com/mail/?view=cm&fs=1&to=ashram@manjothi.com&su=${encodeURIComponent('Enquiry — Manujothi Ashram')}&body=${encodeURIComponent('Dear Manujothi Ashram,\n\nI am reaching out with the following enquiry:\n\n[Please write your message here]\n\n— My Details —\nName    : \nPhone   : \nCity    : \nCountry : \n\nWith warm regards,')}`, icon: <MailIcon />, color: '#C4884A', label: 'Email' },
                   ].map((s) => (
                     <a key={s.label} href={s.href}
-                      target={s.href.startsWith('mailto:') ? undefined : '_blank'}
-                      rel={s.href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300"
                       style={{ border: '1px solid rgba(196,136,74,0.25)', color: 'rgba(252,250,248,0.35)' }}
                       aria-label={s.label}

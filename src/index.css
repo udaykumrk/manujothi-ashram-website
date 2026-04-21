@@ -825,4 +825,39 @@ section[id], footer[id] {
   flex-direction: column;
   will-change: transform;
   animation: gallery-scroll-up 32s linear infinite;
-}
+}
+
+/* ─── Bug #19 Fix: Optimized Print Stylesheet ─── */
+@media print {
+  /* Hide non-content chrome */
+  nav, footer, video, .marquee-track,
+  button, [aria-label="Back to top"] {
+    display: none !important;
+  }
+
+  /* Show full URLs after external links for print readers */
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.75em;
+    color: #555;
+    word-break: break-all;
+  }
+
+  /* Avoid splitting sections across page breaks */
+  section {
+    page-break-inside: avoid;
+  }
+
+  /* Reasonable print margins */
+  @page {
+    margin: 1.5cm;
+  }
+
+  /* Ensure text is readable on paper */
+  body {
+    color: #000 !important;
+    background: #fff !important;
+    font-size: 12pt;
+  }
+}
+

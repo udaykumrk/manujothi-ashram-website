@@ -1,8 +1,9 @@
+import { useState, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
-import { useRef } from 'react';
 
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
+  const [videoError, setVideoError] = useState(false);
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
   const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
 
@@ -11,20 +12,30 @@ export function Hero() {
 
       {/* ── Video Background — slowed to 0.5x playback speed ── */}
       <div className="absolute inset-0 z-0">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          poster="/ashram_hero_dawn.png"
-          className="w-full h-full object-cover"
-          onLoadedMetadata={(e) => {
-            (e.target as HTMLVideoElement).playbackRate = 0.5;
-          }}
-        >
-          <source src="/landing_page_hd.mp4" type="video/mp4" />
-        </video>
+        {videoError ? (
+          /* Fallback: static poster image when video fails to load (common on mobile data) */
+          <img
+            src="/ashram_hero_dawn.png"
+            alt="Manujothi Ashram at dawn"
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            poster="/ashram_hero_dawn.png"
+            className="w-full h-full object-cover"
+            onError={() => setVideoError(true)}
+            onLoadedMetadata={(e) => {
+              (e.target as HTMLVideoElement).playbackRate = 0.5;
+            }}
+          >
+            <source src="/landing_page_hd.mp4" type="video/mp4" />
+          </video>
+        )}
       </div>
 
       {/* ── Multi-layer overlay ── */}

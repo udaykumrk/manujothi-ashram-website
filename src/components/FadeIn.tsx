@@ -9,7 +9,6 @@ interface FadeInProps {
   className?: string;
   variant?: RevealVariant;
   duration?: number;
-  [key: string]: unknown;
 }
 
 const variantMap: Record<RevealVariant, Variants> = {

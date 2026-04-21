@@ -180,19 +180,20 @@ export function Teachings() {
         {/* Teaching cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {teachings.map((item, index) => (
-            <FadeIn key={item.title} delay={index * 0.12} variant="scale">
-              <motion.div
-                whileHover={{
-                  y: -24,
-                  scale: 1.08,
-                  boxShadow: '0 35px 60px -15px rgba(0, 0, 0, 0.45), 0 20px 35px -10px rgba(184, 151, 104, 0.25)',
-                  zIndex: 10,
-                }}
-                whileTap={{ scale: 1.02 }}
-                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                className="group relative h-full flex flex-col overflow-hidden cursor-pointer rounded-2xl"
-                style={{ zIndex: 1 }}
-              >
+            <div key={item.title}>
+              <FadeIn delay={index * 0.12} variant="scale">
+                <motion.div
+                  whileHover={{
+                    y: -24,
+                    scale: 1.08,
+                    boxShadow: '0 35px 60px -15px rgba(0, 0, 0, 0.45), 0 20px 35px -10px rgba(184, 151, 104, 0.25)',
+                    zIndex: 10,
+                  }}
+                  whileTap={{ scale: 1.02 }}
+                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                  className="group relative h-full flex flex-col overflow-hidden cursor-pointer rounded-2xl"
+                  style={{ zIndex: 1 }}
+                >
                 {/* Background image */}
                 <div className="absolute inset-0 z-0">
                   <img
@@ -222,7 +223,8 @@ export function Teachings() {
                   </div>
                 </div>
               </motion.div>
-            </FadeIn>
+              </FadeIn>
+            </div>
           ))}
         </div>
 

@@ -27,7 +27,7 @@ const CARDS = [
   },
   {
     name: 'Email',
-    href: 'mailto:ashram@manjothi.com',
+    href: `https://mail.google.com/mail/?view=cm&fs=1&to=ashram@manjothi.com&su=${encodeURIComponent('Enquiry — Manujothi Ashram')}&body=${encodeURIComponent('Dear Manujothi Ashram,\n\nI am reaching out with the following enquiry:\n\n[Please write your message here]\n\n— My Details —\nName    : \nPhone   : \nCity    : \nCountry : \n\nWith warm regards,')}`,
     color: '#C4884A',
     bg: 'linear-gradient(135deg, #C4884A, #A06830)',
     icon: `<svg viewBox="0 0 24 24" fill="white" width="28" height="28"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>`,
